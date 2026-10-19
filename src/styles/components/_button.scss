@@ -1,0 +1,118 @@
+@use "../abstracts/mixins" as m;
+
+// One base reset plus variants. Every clickable thing in the app is a .btn.
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: default;
+  }
+
+  // Big call to action.
+  &--primary {
+    padding: 1em 1.8em;
+    border-radius: var(--radius-pill);
+    background: var(--chili);
+    color: var(--vanilla);
+    font: 800 0.9rem var(--font-body);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: transform 0.2s, letter-spacing 0.2s;
+
+    @include m.hover {
+      transform: scale(1.05);
+      letter-spacing: 0.16em;
+    }
+
+    &:active,
+    &:disabled {
+      transform: scale(0.96);
+    }
+  }
+
+  // Underlined text action.
+  &--link {
+    justify-self: start;
+    font: 800 0.85rem var(--font-body);
+    text-decoration: underline;
+  }
+
+  // Round arrow (pager).
+  &--round {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 0.0938rem solid currentColor;
+    border-radius: 50%;
+    font: 400 1.4rem / 1 var(--font-body);
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+
+    @include m.hover {
+      &:not(:disabled) {
+        background: var(--accent, var(--chili));
+        border-color: var(--accent, var(--chili));
+        color: var(--accent-ink, var(--vanilla));
+        transform: scale(1.08);
+      }
+    }
+
+    &:disabled {
+      opacity: 0.25;
+    }
+  }
+
+  // Round bag in the navbar, with a count badge.
+  &--bag {
+    position: relative;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 50%;
+    background: var(--melon);
+    color: var(--night);
+    transition: transform 0.2s;
+
+    @include m.hover {
+      transform: scale(1.08);
+    }
+  }
+
+  &__badge {
+    position: absolute;
+    top: -0.2rem;
+    right: -0.2rem;
+    min-width: 1.15rem;
+    height: 1.15rem;
+    display: grid;
+    place-items: center;
+    padding: 0 0.25rem;
+    border-radius: var(--radius-pill);
+    background: var(--vanilla);
+    color: var(--chili);
+    font: 800 0.68rem / 1 var(--font-body);
+  }
+
+  // Round icon-only button (close, stepper +/−).
+  &--icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    transition: background 0.2s;
+
+    @include m.hover {
+      background: #35566f14;
+    }
+
+    &:disabled {
+      opacity: 0.35;
+    }
+  }
+}

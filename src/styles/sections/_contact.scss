@@ -1,0 +1,71 @@
+@use "../abstracts/mixins" as m;
+
+// Contacto, in the style of the logo: the same burnt orange header with its petals as
+// Productos, then a cream page with the ways to reach us and a form on a retro offset shadow.
+.contact {
+  padding-top: 0;
+  overflow: clip;
+
+  &__hero {
+    position: relative;
+    min-height: min(46svh, 26rem);
+    display: grid;
+    align-items: end;
+    overflow: hidden;
+    background: var(--burnt);
+    color: var(--vanilla);
+  }
+
+  &__burst {
+    position: absolute;
+
+    &--big {
+      top: 50%;
+      right: -12%;
+      width: clamp(22rem, m.vw(54), 46rem);
+      translate: 0 -46%;
+    }
+
+    &--small {
+      bottom: -9%;
+      left: -7%;
+      width: clamp(9rem, m.vw(22), 18rem);
+    }
+
+    @include m.phone {
+      &--big {
+        right: -45%;
+        opacity: 0.8;
+      }
+    }
+  }
+
+  &__title {
+    position: relative;
+    padding: calc(var(--nav-height) + 2rem) var(--gutter) clamp(3rem, m.vw(6), 5rem);
+
+    .heading {
+      max-width: 11ch;
+      margin-top: 0.8rem;
+      font: 400 clamp(3rem, m.vw(8), 6.6rem) / 0.95 var(--font-display);
+      text-shadow: 0.04em 0.05em 0 var(--burnt-deep);
+    }
+  }
+
+  &__body {
+    padding: clamp(3rem, m.vw(6), 5rem) var(--gutter) clamp(4rem, m.vw(8), 6rem);
+    background: var(--shop-bg);
+    color: var(--night);
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(2.5rem, m.vw(6), 5rem);
+    align-items: start;
+
+    @include m.tablet {
+      grid-template-columns: 1fr;
+    }
+  }
+}

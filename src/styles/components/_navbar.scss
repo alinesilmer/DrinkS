@@ -1,0 +1,144 @@
+@use "../abstracts/mixins" as m;
+
+// One floating capsule in the burnt orange of the logo (the logo's own background blends into
+// it): logo, the three pages in cream capitals, the bag.
+.navbar {
+  position: fixed;
+  z-index: 50;
+  inset: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  padding: 0.75rem var(--gutter) 0;
+  pointer-events: none;
+  transition: transform 0.45s var(--spring), opacity 0.3s;
+
+  &.is-hidden {
+    transform: translateY(-140%);
+    opacity: 0;
+  }
+
+  // keyboard users always see where focus is
+  &.is-hidden:focus-within {
+    transform: none;
+    opacity: 1;
+  }
+
+  &__capsule {
+    width: min(100%, 44rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.4rem 0.4rem 0.4rem 0.5rem;
+    border-radius: var(--radius-pill);
+    background: var(--burnt);
+    box-shadow:
+      0 0 0 2px #f5e9d04d,
+      0 0.35rem 0 -0.05rem var(--burnt-deep),
+      0 1rem 1.5rem -0.75rem #14273a80;
+    color: var(--vanilla);
+    pointer-events: auto;
+
+    // the cream bag button, its count in the dark
+    .btn--bag {
+      background: var(--vanilla);
+      color: var(--burnt);
+    }
+
+    .btn__badge {
+      background: var(--night);
+      color: var(--vanilla);
+    }
+
+    @include m.phone {
+      gap: 0.5rem;
+      padding-left: 0.4rem;
+    }
+  }
+
+  &__logo {
+    color: inherit;
+    text-decoration: none;
+
+    // a sticker: bigger than the bar, with a cream edge, turned a little
+    .logo {
+      height: 3.6rem;
+      margin-block: -0.9rem;
+      border: 3px solid var(--vanilla);
+      border-radius: 0.75rem;
+      box-shadow: 0.15rem 0.25rem 0 var(--burnt-deep);
+      rotate: -4deg;
+
+      @include m.phone {
+        height: 3rem;
+        margin-block: -0.6rem;
+      }
+    }
+  }
+
+  &__links {
+    display: flex;
+    gap: clamp(0.25rem, m.vw(2), 1.5rem);
+  }
+
+  &__link {
+    @include m.active-mark(var(--petal-amber));
+    padding: 0.6em 0.5em 0.75em;
+    font: 800 0.75rem var(--font-body);
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    text-transform: uppercase;
+    opacity: 0.65;
+    transition: opacity 0.2s;
+
+    @include m.hover {
+      opacity: 1;
+    }
+
+    &.is-active {
+      opacity: 1;
+    }
+
+    @include m.phone {
+      padding-inline: 0.3em;
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
+    }
+  }
+}
+
+// The day as four icons on the side: where you are on the home page.
+.rail {
+  position: fixed;
+  z-index: 40;
+  right: 0.875rem;
+  top: 50%;
+  translate: 0 -50%;
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  @include m.glass;
+  border-radius: var(--radius-pill);
+
+  &__link {
+    width: 2.125rem;
+    height: 2.125rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: var(--night);
+    opacity: 0.7;
+    transition: background 0.3s, color 0.3s, opacity 0.3s, transform 0.3s;
+
+    &.is-on {
+      background: var(--melon);
+      color: var(--night);
+      opacity: 1;
+      transform: scale(1.1);
+    }
+  }
+
+  @include m.tablet {
+    display: none;
+  }
+}

@@ -1,0 +1,75 @@
+@use "../abstracts/mixins" as m;
+
+// A ticked row: a little round glass that fills with melon when ticked.
+// Used for the pantry toggles and the ingredients of a recipe.
+.check {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  padding: 0.55rem 0;
+  font: 400 0.98rem var(--font-body);
+  text-align: left;
+
+  &.btn {
+    transition: transform 0.2s;
+
+    @include m.hover {
+      transform: translateX(0.2rem);
+    }
+  }
+
+  // the glass: an empty ring that fills from the bottom
+  &__box {
+    position: relative;
+    flex: none;
+    width: 1.15rem;
+    height: 1.15rem;
+    overflow: hidden;
+    border: 1.5px solid #35566f66;
+    border-radius: 50%;
+    background: linear-gradient(var(--melon), var(--melon)) bottom / 100% 0 no-repeat;
+    transition: background-size 0.4s var(--spring), border-color 0.2s;
+
+    // the tick, drawn once the glass is full
+    &::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 45%;
+      width: 0.28rem;
+      height: 0.5rem;
+      border: solid var(--white);
+      border-width: 0 2px 2px 0;
+      translate: -50% -50%;
+      rotate: 45deg;
+      opacity: 0;
+      transition: opacity 0.2s 0.15s;
+    }
+  }
+
+  &__note {
+    margin-left: auto;
+    @include m.script(0.9rem);
+    color: var(--accent, var(--chili));
+  }
+
+  &.is-on {
+    font-weight: 700;
+  }
+
+  &.is-on &__box {
+    border-color: var(--melon);
+    background-size: 100% 100%;
+
+    &::after {
+      opacity: 1;
+    }
+  }
+}
+
+.check-list {
+  padding: 0;
+  list-style: none;
+}

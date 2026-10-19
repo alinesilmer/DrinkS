@@ -1,0 +1,93 @@
+@use "../abstracts/mixins" as m;
+
+// The contact form as a letter with a retro offset shadow, and the ways to reach us.
+.letter {
+  position: relative;
+  display: grid;
+  gap: 1.25rem;
+  padding: clamp(1.75rem, m.vw(3.5), 2.75rem);
+  border: 2px solid var(--burnt);
+  border-radius: 1.25rem;
+  background: var(--paper);
+  color: var(--night);
+  box-shadow: 0.6rem 0.6rem 0 var(--burnt);
+
+  &__greeting {
+    color: var(--burnt);
+    font: var(--display-weight) clamp(1.8rem, m.vw(3), 2.4rem) / 1 var(--font-display);
+  }
+
+  .btn--primary {
+    justify-self: start;
+    background: var(--burnt);
+  }
+
+  &__status {
+    min-height: 1.5em;
+    font-weight: 800;
+  }
+}
+
+.channels {
+  display: grid;
+  gap: 1.1rem;
+  padding: 0;
+  list-style: none;
+
+  // a card on an offset shadow, like the letter; links lift on hover
+  &__card {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    padding: 1rem 1.25rem;
+    border: 2px solid var(--burnt);
+    border-radius: 1.1rem;
+    background: var(--paper);
+    box-shadow: 0.4rem 0.45rem 0 var(--burnt);
+    color: var(--night);
+    text-decoration: none;
+    transition: translate 0.2s, box-shadow 0.2s;
+  }
+
+  a.channels__card {
+    @include m.hover {
+      translate: -0.15rem -0.15rem;
+      box-shadow: 0.6rem 0.65rem 0 var(--burnt);
+    }
+  }
+
+  // a disc of the palette with the icon in cream
+  &__icon {
+    flex: none;
+    width: 3.4rem;
+    height: 3.4rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--burnt);
+    color: var(--vanilla);
+
+    .icon {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+
+  &__text {
+    min-width: 0;
+  }
+
+  &__label {
+    display: block;
+    color: var(--burnt);
+    font: 800 0.72rem var(--font-body);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  &__value {
+    display: block;
+    overflow-wrap: anywhere;
+    font: var(--display-weight) clamp(1.2rem, #{m.vw(2.2)}, 1.7rem) / 1.15 var(--font-display);
+  }
+}

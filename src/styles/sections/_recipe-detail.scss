@@ -1,0 +1,61 @@
+@use "../abstracts/mixins" as m;
+
+// One recipe as an open magazine spread: title, a small label and the ingredients on the
+// dark left page; the big stamp and the steps on the framed right page.
+.recipe-detail {
+  display: grid;
+  gap: 1.125rem;
+
+  &--left {
+    grid-template-rows: auto auto auto 1fr;
+    justify-items: center;
+
+    .btn--link {
+      justify-self: start;
+    }
+  }
+
+  // a small outlined label, like the "POSTER KAMER" box in the reference
+  &__meta {
+    padding: 0.4rem 0.9rem;
+    border: 1px solid #f5e9d0aa;
+    font: 800 0.66rem var(--font-body);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  // the text sits at the bottom of the page, under the title
+  &__needs {
+    align-self: end;
+    justify-self: stretch;
+  }
+
+  &__figure {
+    display: grid;
+    place-items: center;
+    padding-top: 0.5rem;
+  }
+
+  &__steps {
+    display: grid;
+    gap: 0.625rem;
+    padding-left: 1.3em;
+    line-height: 1.5;
+
+    li::marker {
+      color: var(--melon);
+      font: var(--text-h3);
+    }
+  }
+
+  &__ready {
+    color: var(--melon);
+    @include m.print(1.4rem);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .btn--primary {
+    justify-self: start;
+  }
+}

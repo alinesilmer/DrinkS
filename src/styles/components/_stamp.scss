@@ -1,0 +1,90 @@
+@use "../abstracts/mixins" as m;
+
+// Recipes as postage stamps: each one a tiny cocktail poster (arch, glass, sparkles).
+.stamp {
+  position: relative;
+  display: grid;
+  gap: 0.4375rem;
+  justify-items: center;
+  align-content: start;
+  filter: drop-shadow(0 0.5rem 0.625rem #00000040);
+  transition: transform 0.35s var(--spring);
+
+  &:nth-child(3n + 1) {
+    rotate: -2.5deg;
+  }
+
+  &:nth-child(3n) {
+    rotate: 2deg;
+  }
+
+  &.btn {
+    @include m.hover {
+      transform: translateY(-0.625rem) rotate(2deg) scale(1.08);
+      z-index: 2;
+
+      .stamp__glass {
+        transform: rotate(-9deg);
+      }
+
+      .stamp__sparks {
+        animation: twinkle 1s ease-in-out infinite;
+      }
+    }
+
+    &:focus-visible {
+      transform: translateY(-0.625rem) rotate(2deg) scale(1.08);
+      z-index: 2;
+    }
+  }
+
+  &--large {
+    flex: none;
+    width: 9.375rem;
+    rotate: -3deg;
+  }
+
+  // the perforated edge
+  &__perf {
+    display: block;
+    width: 100%;
+    padding: 0.625rem;
+    background: #fffdf6;
+    mask:
+      linear-gradient(#000 0 0) center / calc(100% - 0.75rem) calc(100% - 0.75rem) no-repeat,
+      radial-gradient(circle, #0000 0.25rem, #000 0.2813rem) -0.375rem -0.375rem / 0.75rem 0.75rem round;
+  }
+
+  &__face {
+    display: grid;
+    justify-items: center;
+    padding: 0.75rem 0.5rem 0;
+    overflow: hidden;
+    background: var(--stamp-bg);
+    color: var(--stamp-ink);
+  }
+
+  &__name {
+    // always two lines tall, so every stamp is the same height
+    height: 2.2em;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    font: var(--text-h3);
+    font-size: 1rem;
+    line-height: 1;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  &__art {
+    width: 100%;
+    margin-top: 0.375rem;
+  }
+
+  &__glass {
+    transform-box: fill-box;
+    transform-origin: 50% 92%;
+    transition: transform 0.5s cubic-bezier(0.3, 1.7, 0.5, 1);
+  }
+}

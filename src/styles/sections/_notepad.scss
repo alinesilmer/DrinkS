@@ -1,0 +1,93 @@
+@use "../abstracts/mixins" as m;
+
+// A wide, short notepad above the book: what you have at home, ticked off line by line. A cream
+// sheet in a frame of rays in the palette; the title and search on the left, the tabs and the
+// list in columns on the right.
+.notepad {
+  padding: 1rem;
+  border-radius: 1.4rem;
+  background: repeating-conic-gradient(from 0deg at 50% 50%, var(--petal-orange) 0 6deg, var(--petal-salmon) 6deg 12deg);
+  box-shadow: 0 1.5rem 2.5rem -1.5rem #0009;
+
+  &__sheet {
+    display: grid;
+    grid-template-columns: minmax(14rem, 19rem) minmax(0, 1fr);
+    grid-template-areas:
+      "title tabs"
+      "search list"
+      "clear list";
+    column-gap: clamp(1.5rem, m.vw(4), 3rem);
+    row-gap: 0.9rem;
+    align-content: start;
+    padding: 1.5rem clamp(1.25rem, m.vw(3), 2.25rem);
+    border-radius: 1rem;
+    background: var(--paper);
+    color: var(--night);
+
+    @include m.tablet {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas:
+        "title"
+        "search"
+        "tabs"
+        "list"
+        "clear";
+    }
+  }
+
+  &__title {
+    grid-area: title;
+    font: var(--display-weight) 2rem / 1 var(--font-display);
+  }
+
+  .search {
+    grid-area: search;
+    align-self: start;
+    background: #ffffff99;
+    border-color: color-mix(in srgb, var(--night) 20%, transparent);
+  }
+
+  .tabs {
+    grid-area: tabs;
+    align-self: end;
+    gap: 0.25rem 0.9rem;
+  }
+
+  // the things you can tick, in as many columns as fit
+  &__list {
+    grid-area: list;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+    column-gap: clamp(1rem, m.vw(3), 2rem);
+    align-content: start;
+    padding: 0;
+    list-style: none;
+  }
+
+  // ruled lines, each with an empty ring in front; ticking fills the ring
+  .check {
+    padding: 0.6rem 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--night) 22%, transparent);
+  }
+
+  .check__box {
+    border-color: var(--night);
+    background: linear-gradient(var(--chili), var(--chili)) bottom / 100% 0 no-repeat;
+  }
+
+  .check.is-on .check__box {
+    border-color: var(--chili);
+    background-size: 100% 100%;
+  }
+
+  &__empty {
+    grid-area: list;
+    opacity: 0.7;
+  }
+
+  &__clear {
+    grid-area: clear;
+    justify-self: start;
+    align-self: start;
+  }
+}

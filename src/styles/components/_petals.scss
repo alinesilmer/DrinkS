@@ -1,0 +1,32 @@
+// A burst of teardrop petals like the splash behind the logo (components/ui/PetalBurst.tsx).
+// Each petal blooms out of the centre one after another, then the whole burst turns slowly.
+.petals {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  animation: revolve 140s linear infinite;
+  pointer-events: none;
+
+  &__petal {
+    rotate: calc(var(--a) * 1deg);
+    scale: var(--l);
+    animation: bloom 0.9s calc(var(--i) * 70ms) var(--spring) backwards;
+
+    &--orange {
+      fill: var(--petal-orange);
+    }
+
+    &--amber {
+      fill: var(--petal-amber);
+    }
+
+    &--salmon {
+      fill: var(--petal-salmon);
+    }
+
+    &--peach {
+      fill: var(--petal-peach);
+    }
+  }
+}

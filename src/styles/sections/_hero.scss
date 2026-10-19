@@ -1,0 +1,158 @@
+@use "../abstracts/mixins" as m;
+
+// Inicio: a tall cover with a pinned screen. The giant word sits behind a big glass that tips
+// and pours as you scroll; then two waves of colour flood up the screen into the next section.
+.hero {
+  position: relative;
+  height: 380vh;
+
+  &__pin {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--burnt);
+    color: var(--vanilla);
+    touch-action: pan-y;
+  }
+
+  // the splash of petals behind everything, growing as you scroll
+  &__burst {
+    position: absolute;
+    top: 52%;
+    left: 50%;
+    width: min(96vmin, 780px);
+    transform: translate(-50%, -50%);
+    will-change: transform;
+  }
+
+  // the headline in two halves, one on each side of the glass; they drift outwards and fade as
+  // the glass tips (--p is the scroll progress, set by the cover)
+  &__title {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    // the right side keeps clear of the side rail
+    padding-inline: var(--gutter) calc(var(--gutter) + 3.5rem);
+    pointer-events: none;
+
+    @include m.tablet {
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 0.2em;
+      padding-top: calc(var(--nav-height) + 1.5rem);
+      text-align: center;
+    }
+  }
+
+  &__side {
+    max-width: 8ch;
+    font: 400 clamp(2.4rem, #{m.vw(7)}, 6.4rem) / 0.95 var(--font-display);
+    text-shadow: 0.04em 0.05em 0 var(--burnt-deep);
+    opacity: clamp(0, calc(1 - var(--p, 0) * 2.4), 1);
+    text-wrap: balance;
+
+    &--left {
+      text-align: left;
+      translate: calc(var(--p, 0) * -16vw) 0;
+    }
+
+    &--right {
+      text-align: right;
+      translate: calc(var(--p, 0) * 16vw) 0;
+    }
+
+    @include m.tablet {
+      max-width: none;
+      font-size: clamp(2rem, 9vw, 3rem);
+
+      &--left,
+      &--right {
+        text-align: center;
+        translate: 0 calc(var(--p, 0) * -6vh);
+      }
+    }
+  }
+
+  .pour {
+    position: absolute;
+    z-index: 3;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+
+    &__stream {
+      stroke: var(--pop);
+    }
+  }
+
+  // the way to the shop, under the glass; it fades as the glass starts to tip
+  &__cta {
+    position: absolute;
+    z-index: 4;
+    bottom: clamp(1.5rem, 7vh, 4rem);
+    left: 50%;
+    translate: -50% 0;
+
+    .btn--primary {
+      padding: 1.15em 2.4em;
+      background: var(--vanilla);
+      box-shadow: 0.3rem 0.35rem 0 var(--burnt-deep);
+      color: var(--burnt);
+      font-size: clamp(0.95rem, #{m.vw(1.4)}, 1.15rem);
+    }
+  }
+
+  // the waves of colour: each rises from below, with a wavy edge, and the last one is the
+  // colour of the next section
+  &__flood {
+    position: absolute;
+    z-index: 6;
+    inset: 0;
+    transform: translateY(calc(100% + 62px));
+    pointer-events: none;
+    will-change: transform;
+
+    svg {
+      position: absolute;
+      bottom: calc(100% - 1px);
+      left: 0;
+      width: 200%;
+      height: 60px;
+      animation: drift 6s linear infinite;
+    }
+
+    path {
+      fill: currentColor;
+    }
+
+    &--peach {
+      background: var(--petal-peach);
+      color: var(--petal-peach);
+    }
+
+    &--paper {
+      background: var(--paper);
+      color: var(--paper);
+
+      svg {
+        animation-duration: 8s;
+        animation-direction: reverse;
+      }
+    }
+  }
+
+  // people who prefer less motion get a single screen with the glass standing still
+  @media (prefers-reduced-motion: reduce) {
+    height: 100vh;
+
+    &__flood {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,42 @@
+@use "../abstracts/mixins" as m;
+
+// ¿Qué preparo hoy?: the same flat design as the rest of Inicio, in the deeper tone of the
+// palette, with a splash of petals behind the notepad and the book.
+.dusk {
+  --accent: var(--chili);
+  --accent-ink: var(--vanilla);
+  --book-ink: var(--vanilla);
+  // the offset shadow of the lettering: darker than the ground
+  --shadow-ink: color-mix(in srgb, var(--burnt-deep) 55%, #000);
+  position: relative;
+  overflow: clip;
+  background: var(--burnt-deep);
+  // the section above (Por qué DrinkS) is the page colour
+  @include m.wave-top(var(--burnt));
+  color: var(--vanilla);
+
+  // a wider stage for the notepad and the album
+  .wrap {
+    z-index: 1;
+    max-width: 82.5rem;
+  }
+
+  .heading {
+    margin-bottom: clamp(1.625rem, m.vw(4), 2.75rem);
+    color: var(--vanilla);
+    text-shadow: 0.04em 0.05em 0 var(--shadow-ink);
+  }
+
+  &__burst {
+    position: absolute;
+    top: -12%;
+    right: -14%;
+    width: clamp(24rem, m.vw(56), 50rem);
+    pointer-events: none;
+
+    @include m.phone {
+      right: -50%;
+      opacity: 0.7;
+    }
+  }
+}

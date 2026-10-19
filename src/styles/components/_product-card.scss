@@ -1,0 +1,106 @@
+@use "../abstracts/mixins" as m;
+
+// Shop product, the usual way: a white card with a thin border, the photo, name, size, price, and
+// a full-width "Agregar" button that turns into − n + (and a coloured edge) once it is in the cart.
+.product-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.6rem 0.6rem 0.75rem;
+  border: 1px solid #14273a1f;
+  border-radius: 0.9rem;
+  background: var(--white);
+  color: var(--night);
+  opacity: 0;
+  transform: translateY(1rem);
+  transition:
+    opacity 0.5s ease calc(var(--i) * 60ms),
+    transform 0.6s ease calc(var(--i) * 60ms),
+    box-shadow 0.2s,
+    border-color 0.2s;
+
+  &.is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    opacity: 1;
+    transform: none;
+  }
+
+  @include m.hover {
+    border-color: color-mix(in srgb, var(--burnt) 50%, transparent);
+    box-shadow: 0 0.8rem 1.4rem -1rem #14273a73;
+  }
+
+  &__media {
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 0.6rem;
+    background: var(--shop-bg);
+  }
+
+  &__info {
+    flex: 1;
+    display: grid;
+    align-content: start;
+    gap: 0.15rem;
+    padding-inline: 0.2rem;
+  }
+
+  &__name {
+    font: 700 0.9rem / 1.25 var(--font-body);
+  }
+
+  &__size {
+    font-size: 0.78rem;
+    opacity: 0.6;
+  }
+
+  &__price {
+    margin-top: 0.25rem;
+    font: 800 1.15rem var(--font-body);
+  }
+
+  // the clear way to buy
+  &__add {
+    width: 100%;
+    gap: 0.4rem;
+    padding: 0.7em 0.5em;
+    border-radius: 0.6rem;
+    background: var(--burnt);
+    color: var(--vanilla);
+    font: 800 0.85rem var(--font-body);
+    transition: background 0.2s;
+
+    @include m.hover {
+      background: var(--burnt-deep);
+    }
+
+    .icon {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  // once in the cart: the same width, − n +
+  .stepper {
+    width: 100%;
+    padding: 0.2rem;
+    border-radius: 0.6rem;
+    background: color-mix(in srgb, var(--burnt) 12%, transparent);
+    color: var(--burnt);
+
+    .btn--icon {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 0.45rem;
+    }
+
+    .stepper__value {
+      font-size: 0.95rem;
+    }
+  }
+}

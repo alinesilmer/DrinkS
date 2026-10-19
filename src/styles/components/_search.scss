@@ -1,0 +1,43 @@
+// Soft rounded search field with a magnifier.
+.search {
+  // never wider than its container, however narrow (inputs have a built-in minimum width)
+  min-width: 0;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 1rem;
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-pill);
+  background: #35566f12;
+  color: inherit;
+  transition: border-color 0.2s, background 0.2s;
+
+  &:focus-within {
+    border-color: var(--accent, var(--chili));
+    background: transparent;
+  }
+
+  .icon {
+    width: 1.1rem;
+    height: 1.1rem;
+    opacity: 0.55;
+  }
+
+  &__input {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: 400 1rem var(--font-body);
+    outline: 0;
+
+    &::placeholder {
+      color: inherit;
+      opacity: 0.5;
+    }
+  }
+}

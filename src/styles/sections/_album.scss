@@ -1,0 +1,45 @@
+@use "../abstracts/mixins" as m;
+
+// An album page: six slots, three by two, side by side. Unused slots stay as empty
+// dashed frames, so the book looks the same whatever is on the page. The frame comes
+// from .book__page--framed.
+.album {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(2, auto);
+  gap: 1.4rem 1.25rem;
+  padding-bottom: 3rem;
+
+  @include m.tablet {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: none;
+  }
+
+  &__slot {
+    position: relative;
+    padding: 0.4rem;
+
+    &:nth-child(odd) {
+      rotate: -1.5deg;
+    }
+
+    &:nth-child(even) {
+      rotate: 1.5deg;
+    }
+
+    .stamp {
+      rotate: 0deg;
+    }
+
+    // a free slot: an invisible stamp keeps it exactly as tall as the others, and only its
+    // dashed outline shows
+    &--empty {
+      border: 1.5px dashed #f5e9d033;
+      border-radius: 0.5rem;
+      rotate: 0deg !important;
+
+      .stamp {
+        visibility: hidden;
+      }
+    }
+  }
+}

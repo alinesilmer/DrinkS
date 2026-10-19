@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brisa Bar en Casa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Mulish:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* Layout: one day at the beach, top to bottom. Sunrise (the glass spills) → sea (you sink
+   into the drink) → wooden cellar (the products) → sunset (the recipe book) → tropical
+   night (order). One palette: sand, orange and sea blue, plus wood. Few words, big type. */
+:root{
+  --vanilla:#F5E9D0; --sable:#F2D08A; --melon:#F78F3F; --chili:#D2491C;
+  --piscine:#8FB8D6; --sea:#7FAFD2; --marine:#35566F; --night:#14273A;
+  --wood:#8A5A36; --wood-l:#C9935F; --wood-d:#5A361D;
+  --display:'Abril Fatface','Bodoni MT',Georgia,serif; --body:'Mulish',system-ui,sans-serif;
+  --h2:400 clamp(2.6rem,8vw,6rem)/.92 var(--display); --h3:400 1.2rem/1.15 var(--display);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--night);color:var(--marine);font:400 1.05rem/1.55 var(--body);overflow-x:clip}
+h1,h2,h3,p{margin:0}
+h2{font:var(--h2);text-wrap:balance}
+a{color:inherit}
+a:focus-visible,button:focus-visible{outline:3px solid currentColor;outline-offset:3px}
+.wrap{max-width:1160px;margin:0 auto;position:relative}
+.sec{position:relative;padding:clamp(70px,10vw,130px) clamp(16px,5vw,64px)}
+
+.nav{position:fixed;z-index:50;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px clamp(16px,4vw,48px)}
+.logo{font:400 1.5rem/1 var(--display);text-decoration:none;color:var(--vanilla);background:var(--chili);padding:.3em .7em .35em;border-radius:999px;box-shadow:0 4px 14px #0003}
+.bag{display:flex;align-items:center;gap:8px;font-weight:800;text-decoration:none;background:var(--vanilla);color:var(--chili);padding:.5em 1em;border-radius:999px;box-shadow:0 4px 14px #0003}
+.bag svg{width:20px;height:20px}
+.bump{animation:bump .45s}
+@keyframes bump{40%{transform:scale(1.2)}}
+.btn{display:inline-block;font:800 .9rem var(--body);letter-spacing:.12em;text-transform:uppercase;padding:1em 1.8em;border-radius:999px;border:0;background:var(--chili);color:var(--vanilla);text-decoration:none;cursor:pointer;transition:transform .2s,letter-spacing .2s}
+.btn:hover{transform:scale(1.05);letter-spacing:.16em}
+.btn:active,.btn:disabled{transform:scale(.96)}
+
+/* the day as five icons: where you are in the page */
+.rail{position:fixed;z-index:40;right:14px;top:50%;translate:0 -50%;display:grid;gap:8px;padding:8px;border-radius:999px;background:#f5e9d0cc;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.rail a{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:var(--marine);transition:background .3s,color .3s,transform .3s}
+.rail a svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.rail a.on{background:var(--chili);color:var(--vanilla);transform:scale(1.12)}
+
+/* ---------- 1 · amanecer ---------- */
+.hero{height:420vh;position:relative}
+.pin{position:sticky;top:0;height:100vh;overflow:hidden;background:linear-gradient(#E9692C,var(--melon) 38%,var(--sable));touch-action:pan-y}
+.day{position:absolute;inset:0;background:linear-gradient(var(--melon),var(--sable) 55%,var(--vanilla));opacity:0}
+.sun{position:absolute;left:50%;top:14vh;width:min(78vmin,680px);aspect-ratio:1;translate:-50% 0;border-radius:50%;background:radial-gradient(#fffdf0,#FFF0BE 55%,var(--sable));box-shadow:0 0 120px 50px #fff3c488;will-change:transform;animation:glow 5s ease-in-out infinite}
+.sun::before{content:'';position:absolute;inset:-60%;border-radius:50%;background:repeating-conic-gradient(#fff5 0 5deg,transparent 5deg 15deg);-webkit-mask:radial-gradient(closest-side,transparent 45%,#000 47%,transparent 100%);mask:radial-gradient(closest-side,transparent 45%,#000 47%,transparent 100%);animation:spin 60s linear infinite}
+@keyframes glow{50%{box-shadow:0 0 190px 90px #fff3c4aa}}
+@keyframes spin{to{rotate:360deg}}
+.title{position:absolute;z-index:2;left:0;right:0;top:11vh;text-align:center;pointer-events:none;will-change:transform}
+.title em{display:block;font:400 clamp(1.2rem,2.800vw,2.2rem)/1.2 var(--display);font-style:normal;color:var(--vanilla)}
+.title span{display:block;font:400 clamp(4rem,19vw,17rem)/.84 var(--display);color:#fff;text-transform:uppercase;letter-spacing:-.01em}
+.stage{position:absolute;inset:0;width:100%;height:100%;overflow:visible;z-index:3;pointer-events:none}
+.hint{position:absolute;z-index:4;right:clamp(64px,7vw,110px);bottom:clamp(22px,6vh,64px);width:30px;color:#fff}
+.hint svg{display:block;width:100%;fill:none;stroke:currentColor;stroke-width:2.500;stroke-linecap:round;stroke-linejoin:round}
+.hint .dot{animation:wheel 1.4s ease-in-out infinite}
+.hint .chev{animation:bob 1.4s ease-in-out infinite}
+@keyframes wheel{50%{transform:translateY(9px);opacity:.2}}
+@keyframes bob{50%{transform:translateY(6px)}}
+.flood{position:absolute;z-index:6;inset:0;transform:translateY(calc(100% + 62px));will-change:transform;pointer-events:none}
+.flood svg{position:absolute;left:0;bottom:calc(100% - 1px);width:200%;height:60px;animation:drift 6s linear infinite}
+.flood path{fill:currentColor}
+.f1{background:var(--piscine);color:var(--piscine)}
+.f2{background:var(--sea);color:var(--sea)}
+.f2 svg{animation-duration:8s;animation-direction:reverse}
+@keyframes drift{to{transform:translateX(-50%)}}
+
+/* ---------- 2 · mar ---------- */
+.sea{position:relative;background:linear-gradient(var(--sea),#5B88AD 40%,var(--marine));color:#fff;padding-bottom:clamp(110px,15vw,190px)}
+.fx{position:sticky;top:0;height:100vh;margin-bottom:-100vh;overflow:hidden;pointer-events:none;z-index:0}
+.ray{position:absolute;top:-20%;width:20vw;height:150%;background:linear-gradient(#ffffff40,transparent 85%);transform-origin:50% 0;animation:ray 8s ease-in-out infinite alternate}
+.ray:nth-child(1){left:12%;rotate:14deg}
+.ray:nth-child(2){left:64%;rotate:-14deg;animation-duration:11s}
+@keyframes ray{to{transform:rotate(8deg) scaleX(1.3)}}
+.bub{position:absolute;bottom:-40px;border-radius:50%;border:2px solid #ffffffb3;animation:rise linear infinite}
+@keyframes rise{to{transform:translateY(-115vh) translateX(30px)}}
+.fl{position:absolute;top:0;border-radius:22%;background:linear-gradient(135deg,#ffffffd9,#ffffff4d);border:2px solid #fff;will-change:transform}
+.say{position:relative;z-index:1;padding:clamp(90px,14vw,190px) clamp(16px,6vw,96px)}
+.words{max-width:14ch;margin:0 auto;font:400 clamp(2.8rem,9vw,7.5rem)/.98 var(--display);text-wrap:balance}
+.words span{opacity:.2;transition:opacity .25s}
+.words span.hot{color:var(--sable)}
+.slab{position:sticky;z-index:1;top:calc(84px + var(--i)*18px);max-width:1000px;margin:0 clamp(16px,5vw,64px) 30px;min-height:min(56vh,440px);border-radius:38px;padding:clamp(22px,4vw,56px);display:grid;grid-template-columns:1.2fr .8fr;gap:24px;align-items:center;background:var(--bg);color:var(--fg);transform-origin:50% 0;box-shadow:0 -18px 40px -24px #0b1f3399}
+@media(min-width:1130px){.slab{margin-inline:auto}}
+.slab h3{font:400 clamp(4rem,13vw,10rem)/.86 var(--display);font-variant-numeric:tabular-nums}
+.slab .lead{display:block;margin-top:.3em;font:400 clamp(1.4rem,3vw,2.2rem)/1.1 var(--display)}
+.slab .pic{justify-self:center;width:min(100%,240px);aspect-ratio:3/4;border-radius:999px 999px 20px 20px;background:var(--ac);display:grid;place-items:center;overflow:hidden}
+.slab .pic svg{height:80%;animation:swing 4s ease-in-out infinite;transform-origin:50% 90%}
+@keyframes swing{50%{transform:rotate(5deg)}}
+
+/* ---------- 3 · bodega: la máquina ---------- */
+/* a beach-kiosk vending machine: striped awning, glass front with the products on rails,
+   a side panel with a screen and category keys, and a tray the picks drop into */
+.cellar{z-index:2;margin-top:-56px;border-radius:56px 56px 0 0;background:linear-gradient(var(--vanilla),var(--sable));color:var(--marine)}
+.cellar h2{color:var(--chili);margin-bottom:34px}
+.vend{--pad:clamp(12px,2vw,26px);position:relative;background:var(--melon);border-radius:40px;padding:0 var(--pad) var(--pad);box-shadow:inset 0 -12px 0 #00000021,0 44px 60px -34px #7a3a10b3}
+.awning{height:76px;margin:0 calc(-1*var(--pad)) 20px;border-radius:40px 40px 0 0;background:repeating-linear-gradient(90deg,var(--chili) 0 56px,var(--vanilla) 56px 112px);
+  -webkit-mask:linear-gradient(#000 0 0) top/100% 48px no-repeat,radial-gradient(circle 28px at 50% 48px,#000 98%,#0000) 0 0/56px 100% repeat-x;
+  mask:linear-gradient(#000 0 0) top/100% 48px no-repeat,radial-gradient(circle 28px at 50% 48px,#000 98%,#0000) 0 0/56px 100% repeat-x}
+.vend-in{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:var(--pad)}
+.glass{position:relative;border-radius:24px;background:linear-gradient(160deg,#4A7392,var(--marine) 45%,#27455A);padding:78px 20px 28px;box-shadow:inset 0 0 0 5px #00000033,inset 0 14px 30px #00000066;overflow:hidden}
+.glass::before{content:'';position:absolute;z-index:3;inset:0;background:linear-gradient(115deg,#ffffff1f 0 10%,#0000 10% 28%,#ffffff12 28% 34%,#0000 34%);pointer-events:none}
+.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:84px 18px}
+.item{position:relative;display:grid;justify-items:center;gap:3px;padding:0 14px 16px;border-radius:22px;background:#fff;color:var(--marine);text-align:center;animation:pop .5s both;animation-delay:calc(var(--i)*35ms);transition:transform .3s}
+.item::after{content:'';position:absolute;left:-9px;right:-9px;bottom:-16px;height:6px;border-radius:3px;background:#ffffff47}
+.item:hover{transform:translateY(-6px)}
+.ph{width:62%;aspect-ratio:3/4;margin-top:-54px;border-radius:999px 999px 22px 22px;overflow:hidden;border:5px solid #fff;background:#fff;box-shadow:0 10px 20px #0000003d;transition:transform .45s cubic-bezier(.3,1.6,.5,1)}
+.item:hover .ph{transform:translateY(-8px) rotate(-4deg)}
+.ph img{display:block;width:100%;height:100%;object-fit:cover}
+.item h3{font:var(--h3);font-size:1.05rem;margin-top:10px}
+.item p{font-size:.78rem;opacity:.75}
+.pill{margin-top:8px;font:800 .8rem var(--body);padding:.65em 1.25em;border-radius:999px;border:1.500px solid var(--chili);background:#fff;color:var(--chili);cursor:pointer;transition:transform .2s,background .2s,color .2s}
+.pill:hover{background:var(--chili);color:#fff;transform:scale(1.07)}
+.panel{position:sticky;top:84px;align-self:start;display:grid;gap:14px;padding:16px;border-radius:24px;background:var(--chili);color:var(--vanilla)}
+.screen{min-height:96px;display:grid;align-content:center;padding:14px;border-radius:12px;background:var(--night);color:var(--sable);font:800 .74rem/1.4 var(--body);letter-spacing:.12em;text-transform:uppercase;box-shadow:inset 0 0 0 3px #00000059}
+.screen b{display:block;font:400 1.35rem/1.1 var(--display);letter-spacing:0;text-transform:none;color:var(--vanilla)}
+.filters{display:grid;gap:9px}
+.filters button{font:800 .74rem var(--body);letter-spacing:.08em;text-transform:uppercase;text-align:left;padding:.85em 1em;border-radius:12px;border:0;background:var(--vanilla);color:var(--marine);cursor:pointer;box-shadow:0 4px 0 #0000004d;transition:transform .1s,box-shadow .1s,background .2s}
+.filters button[aria-pressed=true]{background:var(--sable);transform:translateY(3px);box-shadow:0 1px 0 #0000004d}
+.coin{justify-self:center;width:56px;height:10px;border-radius:5px;background:var(--night);box-shadow:0 0 0 4px #00000026}
+.tray{position:relative;display:flex;align-items:flex-end;gap:6px;height:84px;padding:8px 12px;border-radius:14px;background:var(--night);box-shadow:inset 0 12px 22px #000000b3;overflow:hidden}
+.tray img{width:34px;height:46px;flex:none;object-fit:cover;border-radius:999px 999px 8px 8px;border:3px solid #fff;animation:land .45s cubic-bezier(.3,1.6,.5,1)}
+.drop{position:fixed;z-index:60;object-fit:cover;border-radius:999px 999px 22px 22px;border:5px solid #fff;pointer-events:none}
+@keyframes land{from{transform:translateY(-40px) rotate(20deg)}}
+@keyframes pop{from{opacity:0;transform:translateY(24px)}}
+@media(max-width:820px){
+  .vend-in{grid-template-columns:1fr}
+  .panel{position:static;order:-1}
+  .filters{grid-template-columns:repeat(2,1fr)}
+  .coin{display:none}
+}
+
+/* ---------- 4 · atardecer ---------- */
+.dusk{overflow:clip;background:linear-gradient(var(--sable),var(--melon) 22%,var(--chili) 68%,#5C2F3A 88%,var(--night));color:var(--vanilla);
+  --accent:var(--chili);--accent-ink:var(--vanilla);--paper:#FBF3E2;--book-ink:var(--marine)}
+.setsun{position:absolute;left:50%;top:6%;width:min(70vmin,560px);aspect-ratio:1;translate:-50% 0;border-radius:50%;background:radial-gradient(#fff6d2,var(--sable) 60%,#F5B25A);box-shadow:0 0 140px 40px #ffe2a066;will-change:transform}
+.row{position:relative;margin:0 calc(-1*clamp(16px,5vw,64px)) clamp(30px,5vw,60px);overflow:hidden;font:400 clamp(3.2rem,12vw,10rem)/1 var(--display);text-transform:uppercase;white-space:nowrap;color:#fff}
+.row div{will-change:transform}
+.dusk h2{margin-bottom:clamp(26px,4vw,44px);color:#fff}
+.book{position:relative;display:grid;grid-template-columns:.85fr 1.15fr;background:var(--paper);color:var(--book-ink);border-radius:18px;min-height:620px;box-shadow:0 50px 90px -40px #000a,0 0 0 1px #0000001a,8px 8px 0 -2px #cdbf9f,14px 14px 0 -4px #a89a7c;perspective:2000px}
+.book::before{content:'';position:absolute;z-index:3;left:42.500%;top:0;bottom:0;width:70px;translate:-50% 0;background:linear-gradient(90deg,transparent,#0000001a 42%,#00000038 50%,#0000001a 58%,transparent);pointer-events:none}
+.book::after{content:'';position:absolute;z-index:4;right:44px;top:-10px;width:26px;height:74px;background:var(--accent);clip-path:polygon(0 0,100% 0,100% 100%,50% 78%,0 100%)}
+.page{min-width:0;padding:clamp(22px,3.600vw,48px);display:grid;align-content:start;gap:18px}
+.page.right{transform-origin:0 50%}
+.page.right.flip{animation:flip .55s cubic-bezier(.3,.7,.3,1)}
+@keyframes flip{from{transform:rotateY(-75deg);opacity:.3}}
+.ptitle,.rname{font:400 clamp(1.8rem,3.200vw,2.6rem)/1 var(--display)}
+.search{width:100%;font:400 1.15rem var(--display);padding:.5em 0;border:0;border-bottom:2px solid var(--book-ink);border-radius:0;background:transparent;color:inherit}
+.search::placeholder{color:inherit;opacity:.45}
+.search:focus-visible{outline:0;border-bottom-color:var(--accent)}
+.pantry{columns:2;column-gap:26px}
+.group{break-inside:avoid;margin-bottom:14px}
+.group summary{display:flex;align-items:center;gap:8px;padding:7px 0;list-style:none;cursor:pointer;font:400 1.05rem var(--display);color:var(--accent);border-bottom:1.500px solid var(--accent)}
+.group summary::-webkit-details-marker{display:none}
+.group summary::after{content:'';margin-left:auto;width:7px;height:7px;border-right:2px solid;border-bottom:2px solid;rotate:45deg;translate:0 -2px;transition:rotate .25s,translate .25s}
+.group[open] summary::after{rotate:225deg;translate:0 2px}
+.group summary b{min-width:1.700em;padding:.15em .4em;border-radius:999px;background:var(--accent);color:var(--accent-ink);font:800 .68rem var(--body);text-align:center}
+.group h4,.sub{margin:0 0 4px;font:400 1.05rem var(--display);color:var(--accent)}
+.group ul,.needs{list-style:none;margin:0;padding:0}
+.group button,.needs li{width:100%;display:flex;align-items:center;gap:10px;padding:7px 0;border:0;border-bottom:1px dotted #35566f73;background:none;color:inherit;font:400 .98rem var(--body);text-align:left}
+.group button{cursor:pointer;transition:padding .15s}
+.group button:hover{padding-left:5px}
+.box{flex:none;width:16px;height:16px;border:1.500px solid var(--book-ink);border-radius:4px;display:grid;place-items:center;font-size:12px;line-height:1}
+[aria-pressed=true]>.box,.ok>.box{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+[aria-pressed=true]>.box::after,.ok>.box::after{content:'✓'}
+.group button[aria-pressed=true]{font-weight:800}
+.needs li em{margin-left:auto;font:400 .9rem var(--display);font-style:normal;color:var(--accent)}
+.clear,.back{justify-self:start;font:800 .85rem var(--body);background:none;border:0;padding:0;color:inherit;text-decoration:underline;cursor:pointer}
+.none{margin:0;opacity:.7}
+.count{margin:0;font:400 1.2rem var(--display)}
+.count b{font-weight:400;color:var(--accent)}
+/* recipes as postage stamps: each one a tiny cocktail poster (arch, glass, sparkles) */
+.stamps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px 20px;padding:8px 6px}
+.pager{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:6px}
+.pager button{width:40px;height:40px;border-radius:50%;border:1.500px solid var(--book-ink);background:none;color:inherit;font:400 1.4rem/1 var(--body);cursor:pointer;transition:background .2s,color .2s,transform .2s}
+.pager button:hover:not(:disabled){background:var(--accent);border-color:var(--accent);color:var(--accent-ink);transform:scale(1.08)}
+.pager button:disabled{opacity:.25;cursor:default}
+.pager span{display:flex;gap:7px}
+.pager i{width:8px;height:8px;border-radius:50%;background:var(--book-ink);opacity:.25;transition:opacity .2s,scale .2s}
+.pager i.on{opacity:1;background:var(--accent);scale:1.3}
+.stamp{position:relative;display:grid;gap:7px;justify-items:center;align-content:start;padding:0;border:0;background:none;color:inherit;font:inherit;filter:drop-shadow(0 8px 10px #00000040);transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+button.stamp{cursor:pointer}
+.stamp:nth-child(3n+1){rotate:-2.500deg}
+.stamp:nth-child(3n){rotate:2deg}
+button.stamp:hover,button.stamp:focus-visible{transform:translateY(-10px) rotate(2deg) scale(1.08);z-index:2}
+.perf{display:block;width:100%;padding:10px;background:#fffdf6;
+  -webkit-mask:linear-gradient(#000 0 0) center/calc(100% - 12px) calc(100% - 12px) no-repeat,radial-gradient(circle,#0000 4px,#000 4.500px) -6px -6px/12px 12px round;
+  mask:linear-gradient(#000 0 0) center/calc(100% - 12px) calc(100% - 12px) no-repeat,radial-gradient(circle,#0000 4px,#000 4.500px) -6px -6px/12px 12px round}
+.st-in{display:grid;justify-items:center;padding:12px 8px 0;background:var(--s);color:var(--t);overflow:hidden}
+.st-name{min-height:2.100em;display:grid;place-items:center;text-align:center;font:var(--h3);font-size:1rem;line-height:1;text-transform:uppercase}
+.st-in svg{width:100%;display:block;margin-top:6px}
+.st-in svg use{transform-box:fill-box;transform-origin:50% 92%;transition:transform .5s cubic-bezier(.3,1.7,.5,1)}
+.stamp:hover svg use{transform:rotate(-9deg)}
+.stamp:hover .spk{animation:tw 1s ease-in-out infinite}
+.st-sub{font-size:.8rem;font-weight:800;opacity:.6}
+.st-sub.ok{opacity:1;color:var(--accent)}
+.mark{position:absolute;right:-12px;bottom:34px;width:58px;height:58px;border-radius:50%;border:2px solid var(--accent);outline:1px solid var(--accent);outline-offset:-6px;color:var(--accent);display:grid;place-items:center;font-size:.58rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;rotate:-16deg;background:#fffdf6d9}
+.rhead{display:flex;gap:22px;align-items:center}
+.rhead .stamp{flex:none;width:150px;rotate:-3deg}
+.tag{margin:6px 0 0;font-weight:800;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;opacity:.7}
+.steps{margin:0;padding-left:1.300em;display:grid;gap:10px;line-height:1.5}
+.steps li::marker{font:var(--h3);color:var(--accent)}
+.ready-note{margin:0;font:400 1.3rem var(--display);color:var(--accent)}
+.page .btn{justify-self:start}
+
+/* ---------- 5 · noche tropical ---------- */
+.night{position:relative;overflow:hidden;min-height:100vh;display:grid;place-items:center;text-align:center;background:linear-gradient(var(--night) 35%,#2A4C66);color:var(--vanilla);padding:clamp(90px,14vw,180px) clamp(16px,5vw,64px) 120px}
+.night .wrap{z-index:2;display:grid;gap:28px;justify-items:center}
+.night h2{font-size:clamp(3rem,11vw,8.5rem);max-width:9ch}
+.moon{position:absolute;right:14%;top:12%;width:clamp(90px,16vmin,170px);aspect-ratio:1;border-radius:50%;background:var(--vanilla);box-shadow:0 0 80px 20px #f5e9d055;will-change:transform}
+.star{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--vanilla);animation:tw 3s ease-in-out infinite}
+@keyframes tw{50%{opacity:.15}}
+.palm{position:absolute;bottom:-20px;width:clamp(200px,34vw,460px);color:#0B1824;transform-origin:50% 100%;animation:sway 7s ease-in-out infinite}
+.palm.l{left:-4%}
+.palm.r{right:-4%;scale:-1 1;animation-delay:-3s}
+@keyframes sway{50%{transform:rotate(2.500deg)}}
+footer{position:absolute;z-index:2;left:0;right:0;bottom:22px;font-size:.85rem;opacity:.7}
+
+@media(max-width:820px){
+  .rail{display:none}
+  .book{grid-template-columns:1fr;min-height:0}
+  .book::before{display:none}
+  .page.right{border-top:2px dashed #0003}
+  .slab{grid-template-columns:1fr;min-height:0}
+  .slab .pic{order:-1;width:120px}
+  .title{top:14vh}
+}
+@media(max-width:460px){.stamps{grid-template-columns:repeat(2,minmax(0,1fr))}.pantry{columns:1}.shelf{grid-template-columns:repeat(2,minmax(0,1fr))}.glass{padding-inline:12px}}
+@media(prefers-reduced-motion:reduce){
+  .hero{height:100vh}.flood,.fx{display:none}
+  *,*::before,*::after{animation:none!important}
+  .words span{opacity:1!important}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="logo" href="#top">Brisa</a>
+  <a class="bag" href="#bodega" aria-label="Bolsa">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6ZM9 8V6a3 3 0 0 1 6 0v2"/></svg>
+    <span data-bag>0</span>
+  </a>
+</nav>
+
+<nav class="rail" aria-label="Secciones">
+  <a href="#top" aria-label="Amanecer"><svg viewBox="0 0 24 24"><path d="M3 18h18M7 18a5 5 0 0 1 10 0M12 4v4M9.500 6.500 12 4l2.500 2.500M4.500 10.500l1.500 1.500M19.500 10.500 18 12"/></svg></a>
+  <a href="#mar" aria-label="Mar"><svg viewBox="0 0 24 24"><path d="M2 8q2.500-3 5 0t5 0 5 0 5 0M2 13q2.500-3 5 0t5 0 5 0 5 0M2 18q2.500-3 5 0t5 0 5 0 5 0"/></svg></a>
+  <a href="#bodega" aria-label="Bodega"><svg viewBox="0 0 24 24"><path d="M10 2h4v5c0 2 3 3 3 6v8H7v-8c0-3 3-4 3-6ZM7 15h10"/></svg></a>
+  <a href="#recetas" aria-label="Recetas"><svg viewBox="0 0 24 24"><path d="M3 17h18M6 21h12M7 17a5 5 0 0 1 10 0M12 4v5M9.500 6.500 12 9l2.500-2.500"/></svg></a>
+  <a href="#noche" aria-label="Noche"><svg viewBox="0 0 24 24"><path d="M20 14.500A8 8 0 1 1 9.500 4a6.500 6.500 0 0 0 10.500 10.500Z"/></svg></a>
+</nav>
+
+<header class="hero" id="top">
+  <div class="pin">
+    <div class="day"></div>
+    <div class="sun"></div>
+    <h1 class="title"><em>tu bar en casa, bien</em><span>Helado</span></h1>
+
+    <svg class="stage" viewBox="200 0 600 1000" aria-hidden="true">
+      <defs>
+        <linearGradient id="drink" gradientUnits="userSpaceOnUse" x1="0" y1="-90" x2="0" y2="125">
+          <stop offset="0" stop-color="#B9D6E8"/><stop offset=".5" stop-color="#8FB8D6"/><stop offset="1" stop-color="#4C7BA0"/>
+        </linearGradient>
+        <clipPath id="bowl"><path data-clip d="M-105-110C-150-20-110 120 0 125C110 120 150-20 105-110Z"/></clipPath>
+      </defs>
+      <g data-rig transform="translate(500 545) scale(1.75)">
+        <g data-glass>
+          <path d="M-6 122V228C-6 240-88 242-88 254H88C88 242 6 240 6 228V122Z" fill="#fff" opacity=".9"/>
+          <path d="M-105-110C-150-20-110 120 0 125C110 120 150-20 105-110Z" fill="#fff" opacity=".4"/>
+          <line x1="-10" y1="92" x2="-58" y2="-222" stroke="#fff" stroke-width="12" stroke-linecap="round"/>
+          <line x1="-10" y1="92" x2="-58" y2="-222" stroke="#D2491C" stroke-width="12" stroke-dasharray="12 12"/>
+        </g>
+        <g clip-path="url(#bowl)"><path data-liquid fill="url(#drink)" opacity=".97"/></g>
+        <path data-stream fill="none" stroke="#8FB8D6" stroke-linecap="round" stroke-linejoin="round"/>
+        <g class="cube"><rect x="-26" y="-26" width="52" height="52" rx="10" fill="#fff" opacity=".62" stroke="#fff" stroke-width="3"/></g>
+        <g class="cube"><rect x="-23" y="-23" width="46" height="46" rx="9" fill="#fff" opacity=".54" stroke="#fff" stroke-width="3"/></g>
+        <g class="cube"><rect x="-22" y="-22" width="44" height="44" rx="9" fill="#fff" opacity=".62" stroke="#fff" stroke-width="3"/></g>
+        <g class="cube"><rect x="-19" y="-19" width="38" height="38" rx="8" fill="#fff" opacity=".5" stroke="#fff" stroke-width="3"/></g>
+        <g data-glass>
+          <path d="M-105-110C-150-20-110 120 0 125C110 120 150-20 105-110Z" fill="none" stroke="#fff" stroke-width="4"/>
+          <path d="M-104-40C-108 20-84 74-44 98" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+          <g transform="translate(-106 -114) rotate(-18)">
+            <circle r="42" fill="#FBF3E2" stroke="#F78F3F" stroke-width="6"/><circle r="30" fill="#F78F3F"/>
+            <path d="M0-30V30M-30 0H30M-21-21L21 21M21-21L-21 21" stroke="#FBF3E2" stroke-width="3.500"/>
+          </g>
+        </g>
+      </g>
+    </svg>
+
+    <div class="hint" aria-hidden="true"><svg viewBox="0 0 30 70"><rect x="4" y="2" width="22" height="36" rx="11"/><path class="dot" d="M15 10v6"/><path class="chev" d="M7 52l8 8 8-8"/></svg></div>
+
+    <div class="flood f1"><svg viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="M0 30Q150 0 300 30T600 30T900 30T1200 30V60H0Z"/></svg></div>
+    <div class="flood f2"><svg viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="M0 30Q150 60 300 30T600 30T900 30T1200 30V60H0Z"/></svg></div>
+  </div>
+</header>
+
+<main>
+<section class="sea" id="mar">
+  <div class="fx" aria-hidden="true"><div class="ray"></div><div class="ray"></div></div>
+  <div class="say"><p class="words">Tú pones el vaso. *Nosotros, el resto.*</p></div>
+
+  <article class="slab" style="--i:0;--bg:var(--vanilla);--fg:var(--chili);--ac:var(--sable)">
+    <div><h3 data-count="-4" data-unit="°C">−4°C</h3><span class="lead">al llegar</span></div>
+    <div class="pic"><svg viewBox="0 0 100 130" aria-hidden="true"><use href="#g-thermo" style="--a:var(--chili)"/></svg></div>
+  </article>
+  <article class="slab" style="--i:1;--bg:var(--sable);--fg:var(--marine);--ac:var(--vanilla)">
+    <div><h3 data-count="45" data-unit=" min">45 min</h3><span class="lead">a tu puerta</span></div>
+    <div class="pic"><svg viewBox="0 0 100 130" aria-hidden="true"><use href="#g-clock" style="--a:var(--chili)"/></svg></div>
+  </article>
+  <article class="slab" style="--i:2;--bg:var(--melon);--fg:var(--vanilla);--ac:var(--chili)">
+    <div><h3 data-count="2" data-unit=" kg">2 kg</h3><span class="lead">de hielo gratis</span></div>
+    <div class="pic"><svg viewBox="0 0 100 130" aria-hidden="true"><use href="#g-ice" style="--a:var(--piscine)"/></svg></div>
+  </article>
+</section>
+
+<section class="sec cellar" id="bodega">
+  <div class="wrap">
+    <h2>La máquina</h2>
+    <div class="vend">
+      <div class="awning" aria-hidden="true"></div>
+      <div class="vend-in">
+        <div class="glass"><div class="shelf" data-shelf></div></div>
+        <aside class="panel">
+          <div class="screen" data-screen aria-live="polite">Elige<b>tu trago</b></div>
+          <div class="filters" data-filters></div>
+          <div class="coin" aria-hidden="true"></div>
+          <div class="tray" data-tray aria-hidden="true"></div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec dusk" id="recetas">
+  <div class="setsun" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="row" aria-hidden="true"><div data-t="Bien frío ✦ recién servido"></div></div>
+    <h2>¿Qué preparo hoy?</h2>
+    <div class="book" data-book>
+      <div class="page left">
+        <h3 class="ptitle">Mi despensa</h3>
+        <input class="search" id="buscar" data-search type="search" placeholder="Busca un ingrediente…" aria-label="Buscar ingrediente" autocomplete="off">
+        <div class="pantry" data-chips></div>
+        <button class="clear" data-clear>Vaciar</button>
+      </div>
+      <div class="page right" data-results aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<section class="night" id="noche">
+  <div class="moon" aria-hidden="true"></div>
+  <svg class="palm l" viewBox="-170 -90 340 440" aria-hidden="true"><use href="#palm"/></svg>
+  <svg class="palm r" viewBox="-170 -90 340 440" aria-hidden="true"><use href="#palm"/></svg>
+  <div class="wrap">
+    <h2>La noche pide hielo</h2>
+    <a class="btn" href="#bodega">Pedir ahora</a>
+  </div>
+  <footer>Brisa · bar en casa · entregas hasta las 9 p. m.</footer>
+</section>
+</main>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="palm" viewBox="-170 -90 340 440">
+    <path d="M0 0C14 120-12 240 34 350" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"/>
+    <g fill="currentColor"><path id="frond" d="M0 0C44-50 116-48 158-4C104-26 52-18 0 0Z"/>
+      <use href="#frond" transform="rotate(-38)"/><use href="#frond" transform="rotate(34)"/>
+      <use href="#frond" transform="scale(-1 1)"/><use href="#frond" transform="scale(-1 1) rotate(-38)"/><use href="#frond" transform="scale(-1 1) rotate(34)"/>
+    </g>
+  </symbol>
+</svg>
+
+<script src="pour.js"></script>
+<script src="shop.js"></script>
+<script>
+const { $, $$, clamp, span, ease, pinned, through, onScroll, glass } = Pour;
+const hero = $('.hero'), day = $('.day'), sun = $('.sun'), title = $('.title'), hint = $('.hint'), floods = $$('.flood');
+const cubes = $$('.cube').map((el, i) => ({ el, x: [-50, 42, -6, 66][i], y: [-10, 6, 52, 58][i], at: .26 + i * .08, spin: [220, -260, 320, -190][i] }));
+
+// the glass tips, the ice slides to the lip and falls, the drink pours out
+const setP = glass($('.stage'), {
+  host: $('.pin'), lip: [105, -110], rest: -74, max: 100, tilt: [.05, .58], dry: [.78, .92], width: 15, length: 1100, sway: 6, wave: 3,
+  rig: (p, tilt) => `translate(${500 - 50 * tilt} ${545 - 100 * tilt}) scale(1.75)`,
+  onFrame(s) {
+    const r = s.a * Math.PI / 180, cs = Math.cos(r), sn = Math.sin(r);
+    cubes.forEach((c, i) => {
+      const t = span(s.p, c.at, c.at + .3), k = ease(Math.min(1, t * 3)), f = Math.max(0, t - .33) / .67;
+      const x0 = c.x * cs - c.y * sn + Math.sin(s.t * .9 + i * 2) * 3, y0 = c.x * sn + c.y * cs + Math.sin(s.t * 1.6 + i * 1.9) * 4;
+      c.el.setAttribute('transform', `translate(${x0 + (s.lx - x0) * k + f * 40} ${y0 + (s.ly - y0) * k + f * f * 950}) rotate(${s.a + c.spin * t + Math.sin(s.t * 1.1 + i) * 8 + i * 20})`);
+    });
+  },
+});
+
+// sea: a few ice cubes and bubbles drifting past as you sink
+const sea = $('.sea'), fx = $('.fx');
+const floaters = [0, 1, 2, 3, 4, 5].map(i => {
+  const el = document.createElement('div'), size = 40 + (i * 53) % 70;
+  el.className = 'fl';
+  el.style.cssText = `left:${(i * 31 + 6) % 92}%;width:${size}px;height:${size}px;opacity:${.35 + size / 220}`;
+  fx.append(el);
+  return { el, speed: .25 + size / 130, base: (i * 211) % 1100, rot: (i % 2 ? 1 : -1) * (.03 + i * .005) };
+});
+for (let i = 0; i < 12; i++) {
+  const b = document.createElement('i'), size = 6 + (i * 11) % 18;
+  b.className = 'bub';
+  b.style.cssText = `left:${(i * 41 + 3) % 98}%;width:${size}px;height:${size}px;animation-duration:${8 + (i * 3) % 8}s;animation-delay:${-i * 1.3}s`;
+  fx.append(b);
+}
+
+// night: stars
+const night = $('.night');
+for (let i = 0; i < 28; i++) {
+  const s = document.createElement('i');
+  s.className = 'star';
+  s.style.cssText = `left:${(i * i * 17 + i * 31 + 7) % 100}%;top:${(i * i * 7 + i * 13 + 3) % 60}%;animation-delay:${-i * .4}s;scale:${.6 + (i % 4) * .3}`;
+  night.prepend(s);
+}
+
+// statement lights up word by word; *starred* words get the accent colour
+const say = $('.say'), words = $('.words');
+let hot = false;
+words.innerHTML = words.textContent.trim().split(/\s+/).map(w => {
+  if (w.startsWith('*')) hot = true;
+  const html = `<span${hot ? ' class="hot"' : ''}>${w.replace(/\*/g, '')}</span>`;
+  if (w.endsWith('*')) hot = false;
+  return html;
+}).join(' ');
+const spans = $$('span', words), slabs = $$('.slab'), row = $('.row div'), dusk = $('.dusk'), setsun = $('.setsun'), moon = $('.moon');
+row.textContent = (row.dataset.t + ' ✦ ').repeat(10);
+const stops = $$('.rail a').map(a => [a, $(a.getAttribute('href'))]);
+
+onScroll(() => {
+  const p = pinned(hero);
+  setP(p);
+  day.style.opacity = ease(span(p, 0, .5)) * .35;
+  sun.style.transform = `translateY(${(1 - ease(span(p, 0, .45))) * 16}vh) scale(${1 + p * .4})`;
+  title.style.transform = `translateY(${-p * 7}vh) scale(${1 + p * .1})`;
+  hint.style.opacity = 1 - span(p, .06, .22);
+  floods.forEach((f, i) => {
+    const t = 1 - ease(span(p, .52 + i * .1, .86 + i * .1));
+    f.style.transform = `translateY(calc(${t * 100}% + ${t * 62}px))`;
+  });
+
+  const d = -sea.getBoundingClientRect().top, H = innerHeight + 300;
+  floaters.forEach(f => {
+    const y = ((f.base - d * f.speed) % H + H) % H - 150;
+    f.el.style.transform = `translateY(${y}px) rotate(${d * f.rot}deg)`;
+  });
+  const t = span(through(say), .15, .5);
+  spans.forEach((el, i) => el.style.opacity = .2 + .8 * span(t, i / spans.length, (i + 1) / spans.length));
+  slabs.forEach((el, i) => {
+    const next = slabs[i + 1];
+    if (!next) return;
+    const k = clamp(1 - (next.getBoundingClientRect().top - el.getBoundingClientRect().top) / el.offsetHeight);
+    el.style.scale = 1 - k * .06;
+    el.style.filter = `brightness(${1 - k * .12})`;
+  });
+
+  // the sun sets behind the book, the moon rises over the palms
+  const k = through(dusk);
+  row.style.transform = `translateX(${-k * 1600}px)`;
+  setsun.style.transform = `translateY(${k * 70}vh) scale(${1 + k * .4})`;
+  setsun.style.opacity = 1 - span(k, .5, .8);
+  moon.style.transform = `translateY(${(1 - span(through(night), 0, .5)) * 30}vh)`;
+
+  let on = stops[0][0];
+  stops.forEach(([a, el]) => { if (el.getBoundingClientRect().top < innerHeight * .5) on = a; });
+  stops.forEach(([a]) => a.classList.toggle('on', a === on));
+});
+</script>
+</body>
+</html>

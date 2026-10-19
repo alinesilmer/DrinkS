@@ -1,0 +1,8 @@
+@use "../abstracts/mixins" as m;
+
+.icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: none;
+  @include m.icon-stroke;
+}

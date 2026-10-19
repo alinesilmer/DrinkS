@@ -1,0 +1,14 @@
+@use "../abstracts/mixins" as m;
+
+// Pages other than home: the first section starts below the fixed navbar, and its own
+// background runs up behind the bar so there is no empty band at the top.
+.page {
+  min-height: 100vh;
+  background: var(--white);
+
+  // :where keeps this at zero specificity, so a page section can set its own top spacing
+  > :where(:first-child) {
+    min-height: 100vh;
+    padding-top: calc(var(--nav-height) + clamp(1rem, m.vw(3), 2.5rem));
+  }
+}

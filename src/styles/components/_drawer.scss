@@ -1,0 +1,35 @@
+// Side panel on the native <dialog> (components/ui/Drawer.tsx).
+.drawer {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: min(27rem, 100%);
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--shop-bg);
+  color: var(--night);
+  box-shadow: -1rem 0 3rem color-mix(in srgb, var(--burnt-deep) 40%, transparent);
+
+  &[open] {
+    animation: drawer-in 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  &::backdrop {
+    background: color-mix(in srgb, var(--burnt-deep) 50%, transparent);
+    backdrop-filter: blur(3px);
+  }
+
+  &__body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+// the page behind stays still while the panel is open
+html:has(.drawer[open]) {
+  overflow: hidden;
+}

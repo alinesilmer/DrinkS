@@ -1,0 +1,116 @@
+// Breakpoints and shared patterns. Partials load it with `@use "../abstracts/mixins" as m;`.
+@mixin tablet {
+  @media (max-width: 820px) {
+    @content;
+  }
+}
+
+@mixin phone {
+  @media (max-width: 460px) {
+    @content;
+  }
+}
+
+// Hover only on devices that really hover, so taps on phones do not leave things stuck.
+@mixin hover {
+  @media (hover: hover) {
+    &:hover {
+      @content;
+    }
+  }
+}
+
+@mixin icon-stroke($width: 2) {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: $width;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+// ---------- sizing ----------
+// Every length in the stylesheets is in rem, so it follows the root font size, which is
+// `100% × --ui-scale` (see base/_tokens.scss). Viewport units don't follow the root size,
+// so viewport-relative sizes go through these helpers to honour the same scale.
+
+@function vw($n) {
+  @return calc(#{$n} * 1vw * var(--ui-scale));
+}
+
+@function vmin($n) {
+  @return calc(#{$n} * 1vmin * var(--ui-scale));
+}
+
+// ---------- active mark ----------
+// A small dot under the active item (nav links, tabs). One look, used everywhere.
+@mixin active-mark($color: var(--chili), $active: ".is-active") {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 0.3rem;
+    height: 0.3rem;
+    translate: -50% 0;
+    border-radius: 50%;
+    background: $color;
+    opacity: 0;
+    transform: scale(0);
+    transition: opacity 0.2s, transform 0.3s var(--spring);
+  }
+
+  &#{$active}::after {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+// ---------- frosted glass ----------
+// A light, blurred pane with a bright edge and a top highlight. Text on it uses --night,
+// which stays readable whether the page behind is light (sky, sand) or dark (sea, night).
+@mixin glass {
+  border: 1px solid #ffffffb3;
+  background: linear-gradient(135deg, #ffffffb3, #ffffff66);
+  backdrop-filter: blur(18px) saturate(1.8);
+  box-shadow:
+    0 0.75rem 2rem -0.75rem #14273a59,
+    inset 0 1px 0 #ffffffe6,
+    inset 0 -1px 0 #ffffff33;
+  color: var(--night);
+}
+
+// ---------- type roles ----------
+// Display (Caprasimo) is the default for headings; these are the other two voices.
+// Print: tall condensed capitals for names, prices and labels.
+@mixin print($size, $line: 1) {
+  font: 400 #{$size} / #{$line} var(--font-print);
+  letter-spacing: 0.03em;
+}
+
+// Script: a handwritten accent for small, warm touches.
+@mixin script($size, $line: 1.2) {
+  font: 400 #{$size} / #{$line} var(--font-script);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+// ---------- wavy top edge ----------
+// The top of a section is a wave in the colour of the section above it ($from), so the two blend
+// instead of meeting on a straight line. The section needs position: relative.
+@mixin wave-top($from) {
+  &::before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    top: -1px;
+    right: 0;
+    left: 0;
+    height: clamp(2.5rem, #{vw(5)}, 4.5rem);
+    background: $from;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 60' preserveAspectRatio='none'%3E%3Cpath d='M0 0H1200V30Q1050 62 900 30T600 30T300 30T0 30Z'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 60' preserveAspectRatio='none'%3E%3Cpath d='M0 0H1200V30Q1050 62 900 30T600 30T300 30T0 30Z'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat;
+    pointer-events: none;
+  }
+}

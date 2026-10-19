@@ -1,0 +1,66 @@
+@use "../abstracts/mixins" as m;
+
+// La noche pide hielo: the flat design again, petals on both sides, a flat moon that rises,
+// one line and one button.
+.night {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  padding: clamp(5.6rem, m.vw(14), 11.25rem) var(--gutter) 7.5rem;
+  background: var(--burnt);
+  color: var(--vanilla);
+  text-align: center;
+  // the section above (the recipes) is the deeper tone
+  @include m.wave-top(var(--burnt-deep));
+
+  &__burst {
+    position: absolute;
+
+    &--left {
+      bottom: -18%;
+      left: -10%;
+      width: clamp(16rem, m.vw(40), 34rem);
+    }
+
+    &--right {
+      top: -14%;
+      right: -12%;
+      width: clamp(18rem, m.vw(44), 38rem);
+    }
+  }
+
+  // a flat cream moon, rising as the section comes into view
+  &__moon {
+    position: absolute;
+    top: 16%;
+    left: 14%;
+    width: clamp(5.6rem, m.vmin(15), 10rem);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--vanilla);
+    box-shadow: 0 0 0 0.9rem color-mix(in srgb, var(--vanilla) 20%, transparent);
+    will-change: transform;
+  }
+
+  &__content {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: 1.75rem;
+
+    // the button is cream on the colour
+    .btn--primary {
+      background: var(--vanilla);
+      color: var(--burnt);
+    }
+  }
+
+  &__line {
+    max-width: 9ch;
+    font: var(--text-h2);
+    font-size: clamp(3rem, m.vw(11), 8.5rem);
+    text-shadow: 0.04em 0.05em 0 var(--burnt-deep);
+  }
+}

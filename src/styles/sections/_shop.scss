@@ -1,0 +1,173 @@
+@use "../abstracts/mixins" as m;
+
+// Productos: a header in the style of the logo, a sticky bar of photo chips, the product
+// grid, a promo band.
+.shop {
+  padding-top: 0;
+  background: var(--shop-bg);
+
+  &__body {
+    position: relative;
+    padding: 0 var(--gutter) clamp(3rem, m.vw(6), 5rem);
+  }
+
+  // the top half is the page, the bottom half the colour of the band: the tilt shows a wedge of cream
+  // above it and a wedge of its own colour below, which then runs straight into the footer
+  &__promo {
+    overflow: clip;
+    padding-block: 3rem 5rem;
+    background: linear-gradient(var(--shop-bg) 50%, var(--burnt) 50%);
+
+    // no shadow under the band, so it runs cleanly into the footer
+    .band {
+      box-shadow: none;
+    }
+  }
+}
+
+// Burnt orange, cream lettering and a splash of warm petals: the logo, made into a page header.
+.shop-hero {
+  position: relative;
+  min-height: min(70svh, 40rem);
+  display: grid;
+  align-items: end;
+  overflow: hidden;
+  background: var(--burnt);
+  color: var(--vanilla);
+
+  &__burst {
+    position: absolute;
+
+    &--big {
+      top: 50%;
+      right: -12%;
+      width: clamp(24rem, m.vw(60), 52rem);
+      translate: 0 -46%;
+    }
+
+    &--small {
+      bottom: -9%;
+      left: -7%;
+      width: clamp(10rem, m.vw(24), 20rem);
+    }
+
+    @include m.phone {
+      &--big {
+        right: -45%;
+        opacity: 0.8;
+      }
+    }
+  }
+
+  &__content {
+    position: relative;
+    padding: calc(var(--nav-height) + 2rem) var(--gutter) clamp(3rem, m.vw(6), 5rem);
+  }
+
+  // small spaced capitals, like the line above the home hero word
+  &__kicker {
+    font: 800 clamp(0.75rem, m.vw(1.1), 0.9rem) / 1 var(--font-body);
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+
+  &__title {
+    max-width: 11ch;
+    margin-top: 0.8rem;
+    font: 400 clamp(3rem, m.vw(8), 6.6rem) / 0.95 var(--font-display);
+    text-shadow: 0.04em 0.05em 0 var(--burnt-deep);
+    text-wrap: balance;
+  }
+}
+
+.shop-grid {
+  position: relative;
+  display: grid;
+  gap: 2rem;
+  scroll-margin-top: var(--nav-height);
+
+  // the name of what you are looking at, and how many there are
+  &__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  &__title {
+    color: var(--burnt);
+    font: var(--display-weight) clamp(1.8rem, #{m.vw(3.4)}, 2.8rem) / 1 var(--font-display);
+  }
+
+  &__count {
+    color: var(--burnt);
+    font: 800 0.75rem var(--font-body);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 1.25rem 1rem;
+
+    @include m.tablet {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    @include m.phone {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.5rem 0.75rem;
+    }
+  }
+}
+
+// Sticky row of plain text tabs, "Todo" first: big capitals, the chosen one in burnt orange with
+// a dot under it. A cream strip runs edge to edge so the products slide away beneath it.
+.category-bar {
+  position: sticky;
+  z-index: 30;
+  top: calc(var(--nav-height) + 0.25rem);
+  display: flex;
+  justify-content: safe center;
+  gap: clamp(1.25rem, #{m.vw(4)}, 3rem);
+  padding-top: 0.75rem;
+  overflow-x: auto;
+  background: var(--shop-bg);
+  box-shadow: 0 0 0 100vmax var(--shop-bg);
+  clip-path: inset(0 -100vmax);
+  color: var(--night);
+  scrollbar-width: none;
+
+  // a hairline under the whole strip
+  &::after {
+    content: "";
+    position: absolute;
+    right: -100vmax;
+    bottom: 0;
+    left: -100vmax;
+    height: 1px;
+    background: color-mix(in srgb, var(--burnt) 25%, transparent);
+  }
+
+  &__item {
+    @include m.active-mark(var(--burnt), ".is-active");
+    flex: none;
+    padding: 0.5rem 0.1rem 1.3rem;
+    @include m.print(1.7rem, 1);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    opacity: 0.4;
+    transition: opacity 0.2s, color 0.2s;
+
+    @include m.hover {
+      opacity: 0.75;
+    }
+
+    &.is-active {
+      color: var(--burnt);
+      opacity: 1;
+    }
+  }
+}

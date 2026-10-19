@@ -1,0 +1,69 @@
+@use "../abstracts/mixins" as m;
+
+// The palette comes from the beach reference: sable, melon, chili, piscine, marine, plus vanilla.
+:root {
+  // The size of the whole interface. Every length is in rem (or goes through m.vw / m.vmin),
+  // so this one number scales the entire site. 1 = 100%, 0.9 = 90%.
+  --ui-scale: 0.9;
+
+  --vanilla: #f5e9d0;
+  --melon: #f78f3f;
+  --chili: #d2491c;
+  --marine: #35566f;
+  --night: #14273a;
+  --paper: #fbf3e2;
+  --shop-bg: #fbf6ec; // warm off-white of the shop
+  // the colours of the logo: burnt orange ground, four warm petals
+  --burnt: #bd4f20;
+  --burnt-deep: #8f3a15; // its shadow, and the footer
+  --petal-orange: #fb6a22;
+  --petal-amber: #ffa62b;
+  --petal-salmon: #fc7b50;
+  --petal-peach: #fd9a6c;
+  // the colour that stands out against the ground (blue on orange, orange on blue, pink on green)
+  --pop: #2f86b4;
+  --pop-light: #8cc8e4;
+  --white: #fff;
+
+  // Four voices, one job each: display (retro 70s titles), print (names, prices, labels),
+  // script (small handwritten accents) and body (running text). See m.print / m.script.
+  --font-display: "Caprasimo", Georgia, serif;
+  --font-print: "Bebas Neue", "Arial Narrow", sans-serif;
+  --font-script: "Pacifico", cursive;
+  --font-body: "DM Sans Variable", system-ui, sans-serif;
+  --display-weight: 400;
+  --display-tracking: -0.01em;
+  --font-axes: normal;
+  --text-h2: var(--display-weight) clamp(2.6rem, #{m.vw(8)}, 6rem) / 0.92 var(--font-display);
+  --text-h3: 400 1.35rem / 1.05 var(--font-print);
+
+  --gutter: clamp(1rem, #{m.vw(5)}, 4rem);
+  --section-pad: clamp(4.375rem, #{m.vw(10)}, 8.125rem);
+  --radius-pill: 999rem;
+  --spring: cubic-bezier(0.3, 1.6, 0.5, 1);
+  --nav-height: 5.25rem;
+}
+
+// Every page wears the same design in its own palette: orange is the logo (Productos), blue is
+// Inicio, green is Contacto. useRouteTheme sets data-theme on <html>.
+:root[data-theme="blue"] {
+  --burnt: #1f6fa8;
+  --burnt-deep: #14507c;
+  --petal-orange: #3aa0e6;
+  --petal-amber: #8fd8f5;
+  --petal-salmon: #5d8bea;
+  --petal-peach: #b4def7;
+  --pop: #fb7a2a;
+  --pop-light: #ffc99a;
+}
+
+:root[data-theme="green"] {
+  --burnt: #2b7a4b;
+  --burnt-deep: #1b5434;
+  --petal-orange: #4fb76a;
+  --petal-amber: #b3dc5f;
+  --petal-salmon: #2f9f8c;
+  --petal-peach: #94d7a6;
+  --pop: #e85d7a;
+  --pop-light: #f7b0bf;
+}

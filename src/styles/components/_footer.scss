@@ -1,0 +1,132 @@
+@use "../abstracts/mixins" as m;
+
+// The footer: one big promise, the shop in four short columns, the small print.
+.site-footer {
+  padding: clamp(3rem, m.vw(7), 5.5rem) var(--gutter) 1.5rem;
+  position: relative;
+  overflow: clip;
+  background: var(--burnt-deep);
+  color: var(--vanilla);
+  // the page above ends in the cream of the shop and contact pages, or the colour of the cover
+  @include m.wave-top(var(--footer-from, var(--shop-bg)));
+
+  // on Inicio the section above is the night, in the page colour
+  // (and on Productos, the promo band is)
+  :root[data-theme="blue"] &,
+  :root[data-theme="orange"] & {
+    --footer-from: var(--burnt);
+  }
+
+  // the splash of petals of the logo, half out of the page
+  &__burst {
+    position: absolute;
+    top: -8.5rem;
+    right: -3%;
+    width: clamp(13rem, #{m.vw(26)}, 24rem);
+  }
+
+  // the call to action is cream on this ground
+  .btn--primary {
+    background: var(--vanilla);
+    color: var(--burnt);
+  }
+
+  &__inner {
+    position: relative;
+    display: grid;
+    gap: clamp(2rem, m.vw(5), 3.5rem);
+    max-width: 72rem;
+    margin-inline: auto;
+  }
+
+  &__top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-bottom: clamp(2rem, m.vw(5), 3.5rem);
+    border-bottom: 1px solid #f5e9d02e;
+  }
+
+  &__line {
+    font: var(--display-weight) clamp(2.4rem, m.vw(7), 5rem) / 0.95 var(--font-display);
+    color: var(--vanilla);
+  }
+
+  &__cols {
+    display: grid;
+    grid-template-columns: 1.3fr repeat(3, 1fr);
+    gap: 2rem;
+
+    @include m.tablet {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @include m.phone {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__brand {
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    gap: 0.75rem;
+
+    .logo {
+      height: 6.5rem;
+    }
+
+    p {
+      max-width: 18ch;
+      opacity: 0.75;
+    }
+  }
+
+  &__title {
+    margin-bottom: 0.9rem;
+    color: var(--petal-peach);
+    @include m.print(1.15rem);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  &__list {
+    display: grid;
+    gap: 0.55rem;
+    padding: 0;
+    list-style: none;
+    font-size: 0.95rem;
+
+    a {
+      @include m.hover {
+        color: var(--petal-peach);
+      }
+    }
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .icon {
+      flex: none;
+      width: 1.1rem;
+      height: 1.1rem;
+      color: var(--petal-peach);
+    }
+  }
+
+  &__legal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid #f5e9d02e;
+    font-size: 0.8rem;
+    opacity: 0.65;
+  }
+}

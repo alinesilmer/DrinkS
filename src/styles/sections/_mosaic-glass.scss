@@ -1,0 +1,170 @@
+@use "../abstracts/mixins" as m;
+
+// The glass fills in three bands as --p goes 0 → 1; each promise appears as plain lettering beside
+// its band once that band starts to fill. --t (the section travelling up the screen) moves the petals.
+.vaso {
+  --gw: clamp(12rem, #{m.vw(26)}, 19rem);
+  --f1: clamp(0, calc(var(--p) * 3), 1);
+  --f2: clamp(0, calc(var(--p) * 3 - 1), 1);
+  --f3: clamp(0, calc(var(--p) * 3 - 2), 1);
+  position: relative;
+  min-height: calc(var(--gw) * 1.45 + 3rem);
+  display: grid;
+  place-items: center;
+  padding-bottom: 3rem;
+
+  // the splash of petals, behind the glass
+  &__burst {
+    position: absolute;
+    inset: 0;
+    width: calc(var(--gw) * 1.5);
+    margin: auto;
+    translate: 0 calc((var(--t) - 0.5) * -4rem);
+
+    @include m.tablet {
+      inset: 0 0 auto;
+      width: calc(var(--gw) * 2.2);
+    }
+  }
+
+  &__glass {
+    position: relative;
+    width: var(--gw);
+    height: auto;
+    overflow: visible;
+    filter: drop-shadow(0 1.2rem 1rem color-mix(in srgb, var(--burnt-deep) 60%, transparent));
+  }
+
+  // each band grows from its own bottom edge; the colours come from the page palette
+  &__band {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+
+    &--1 {
+      fill: var(--pop);
+      transform: scaleY(var(--f1));
+    }
+
+    &--2 {
+      fill: var(--pop-light);
+      transform: scaleY(var(--f2));
+    }
+
+    &--3 {
+      fill: #fff1d6;
+      transform: scaleY(var(--f3));
+    }
+  }
+
+  &__ice {
+    opacity: var(--f1);
+    animation: bob 3s ease-in-out infinite;
+  }
+
+  // plain lettering, no box: the number big in cream, what it is in capitals, one line, and a
+  // thin line with a dot that ties it to the glass
+  &__note {
+    --q: clamp(0, calc(var(--p) * 3 - var(--k) - 0.25), 1);
+    position: absolute;
+    top: var(--y);
+    display: grid;
+    gap: 0.25rem;
+    width: min(15rem, 26vw);
+    opacity: var(--q);
+
+    // the line and its dot
+    &::after {
+      content: "";
+      position: absolute;
+      top: 1.7rem;
+      width: 2.4rem;
+      height: 2px;
+      background: var(--vanilla);
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: calc(1.7rem - 0.25rem);
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 50%;
+      background: var(--vanilla);
+    }
+
+    &--left {
+      right: calc(50% + var(--gw) / 2 + 3.2rem);
+      text-align: right;
+      translate: calc((1 - var(--q)) * -3rem) 0;
+
+      &::after {
+        left: calc(100% + 0.6rem);
+      }
+
+      &::before {
+        left: calc(100% + 3rem);
+      }
+    }
+
+    &--right {
+      left: calc(50% + var(--gw) / 2 + 3.2rem);
+      translate: calc((1 - var(--q)) * 3rem) 0;
+
+      &::after {
+        right: calc(100% + 0.6rem);
+      }
+
+      &::before {
+        right: calc(100% + 3rem);
+      }
+    }
+
+    // on narrow screens the notes stack under the glass, already in place
+    @include m.tablet {
+      position: static;
+      width: min(100%, 22rem);
+      text-align: center !important;
+      translate: none !important;
+      opacity: 1;
+
+      &::before,
+      &::after {
+        display: none;
+      }
+    }
+  }
+
+  @include m.tablet {
+    grid-auto-flow: row;
+    gap: 1.5rem;
+    justify-items: center;
+
+    &__glass {
+      margin-bottom: 1rem;
+    }
+  }
+
+  &__big {
+    font: var(--display-weight) clamp(3.2rem, #{m.vw(6.5)}, 5rem) / 0.9 var(--font-display);
+    text-shadow: 0.04em 0.05em 0 var(--burnt-deep);
+  }
+
+  // the unit is the same lettering, smaller
+  &__unit {
+    margin-left: 0.15em;
+    font-size: 0.42em;
+  }
+
+  &__title {
+    color: var(--vanilla);
+    @include m.print(1.35rem, 1);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  &__text {
+    font-size: 0.92rem;
+    line-height: 1.35;
+    opacity: 0.85;
+  }
+}

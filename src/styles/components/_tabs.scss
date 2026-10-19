@@ -1,0 +1,38 @@
+@use "../abstracts/mixins" as m;
+
+// Plain text tabs; the selected one gets a dot underneath, a tab with a pick gets a small mark.
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.85rem;
+
+  &__tab {
+    @include m.active-mark(var(--accent, var(--chili)), '[aria-selected="true"]');
+    padding: 0.4em 0 0.7em;
+    font: 800 0.7rem var(--font-body);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+
+    @include m.hover {
+      opacity: 0.85;
+    }
+
+    &[aria-selected="true"] {
+      opacity: 1;
+    }
+
+    // something in this category is ticked
+    &.is-marked::before {
+      content: "";
+      position: absolute;
+      top: 0.15rem;
+      right: -0.4rem;
+      width: 0.32rem;
+      height: 0.32rem;
+      border-radius: 50%;
+      background: var(--melon);
+    }
+  }
+}

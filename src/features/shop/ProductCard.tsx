@@ -16,10 +16,7 @@ interface ProductCardProps {
   index: number;
 }
 
-/**
- * The usual shop card: photo, name, size, price, and a full-width "Agregar" button that becomes
- * a − n + control once the product is in the cart.
- */
+/** A shop card like a print taped to the wall: name, photo on a mat, a line about it, size, price, and a round "+" that becomes − n + in the cart. */
 export function ProductCard({ product, index }: ProductCardProps) {
   const card = useRef<HTMLElement>(null);
   const seen = useInView(card, { rootMargin: "0px 0px -8% 0px" });
@@ -27,31 +24,33 @@ export function ProductCard({ product, index }: ProductCardProps) {
   const qty = lines[product.id] ?? 0;
 
   return (
-    <article ref={card} className={cx("product-card", seen && "is-in")} style={cssVars({ "--i": index % 6 })}>
+    <article ref={card} className={cx("product-card", seen && "is-in")} style={cssVars({ "--i": index % 5 })}>
+      <h3 className="product-card__name">{product.name}</h3>
       <div className="product-card__media">
         <Photo src={product.image} alt={product.name} />
       </div>
-      <div className="product-card__info">
-        <h3 className="product-card__name">{product.name}</h3>
-        <p className="product-card__size">{product.size}</p>
-        <p className="product-card__price">{price(product.price)}</p>
+      <p className="product-card__note">{product.note}</p>
+      <div className="product-card__buy">
+        <div className="product-card__cost">
+          <p className="product-card__size">{product.size}</p>
+          <p className="product-card__price">{price(product.price)}</p>
+        </div>
+        {qty === 0 ? (
+          <Button className="product-card__add" aria-label={`${SHOP.add} ${product.name}`} onClick={() => add(product.id)}>
+            <Icon name="plus" />
+          </Button>
+        ) : (
+          <QuantityStepper
+            size="sm"
+            value={qty}
+            max={MAX_QTY}
+            onChange={(n) => setQty(product.id, n)}
+            label={`${BAG.quantity}: ${product.name}`}
+            lessLabel={BAG.less}
+            moreLabel={BAG.more}
+          />
+        )}
       </div>
-      {qty === 0 ? (
-        <Button className="product-card__add" aria-label={`${SHOP.add} ${product.name}`} onClick={() => add(product.id)}>
-          <Icon name="plus" />
-          {SHOP.add}
-        </Button>
-      ) : (
-        <QuantityStepper
-          size="sm"
-          value={qty}
-          max={MAX_QTY}
-          onChange={(n) => setQty(product.id, n)}
-          label={`${BAG.quantity}: ${product.name}`}
-          lessLabel={BAG.less}
-          moreLabel={BAG.more}
-        />
-      )}
     </article>
   );
 }

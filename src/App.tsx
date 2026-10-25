@@ -10,6 +10,7 @@ import { ROUTES } from "@/app/routes";
 
 // The landing page ships in the main bundle; the other pages load when first visited.
 const ProductsPage = lazy(() => import("@/pages/ProductsPage"));
+const RecipesPage = lazy(() => import("@/pages/RecipesPage"));
 const ContactPage = lazy(() => import("@/pages/ContactPage"));
 
 export function App() {
@@ -23,6 +24,7 @@ export function App() {
         <Routes>
           <Route path={ROUTES.home} element={<HomePage />} />
           <Route path={ROUTES.products} element={<ProductsPage />} />
+          <Route path={ROUTES.recipes} element={<RecipesPage />} />
           <Route path={ROUTES.contact} element={<ContactPage />} />
           <Route path="*" element={<HomePage />} />
         </Routes>

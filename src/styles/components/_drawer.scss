@@ -1,3 +1,5 @@
+@use "../abstracts/mixins" as m;
+
 // Side panel on the native <dialog> (components/ui/Drawer.tsx).
 .drawer {
   position: fixed;
@@ -9,8 +11,8 @@
   margin: 0;
   padding: 0;
   border: 0;
-  background: var(--shop-bg);
-  color: var(--night);
+  background: var(--ticket);
+  color: var(--ink);
   box-shadow: -1rem 0 3rem color-mix(in srgb, var(--burnt-deep) 40%, transparent);
 
   &[open] {
@@ -19,13 +21,53 @@
 
   &::backdrop {
     background: color-mix(in srgb, var(--burnt-deep) 50%, transparent);
-    backdrop-filter: blur(3px);
+    backdrop-filter: blur(0.25rem);
   }
 
   &__body {
     height: 100%;
     display: flex;
     flex-direction: column;
+  }
+
+  // the head of every panel: awning stripes, the title in wide white capitals, a scalloped edge like a ticket's
+  &__head {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.7rem 1.5rem 1.5rem;
+    @include m.stripes(var(--cobalt), var(--cobalt-deep));
+    color: #fff;
+
+    // the scallops: half discs of the same stripes hanging from the edge
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 100% 0 auto;
+      height: 0.6rem;
+      @include m.stripes(var(--cobalt), var(--cobalt-deep));
+      -webkit-mask: radial-gradient(circle at 0.55rem 0, #000 0.5rem, transparent 0.53rem) 0 0 / 1.1rem 0.6rem;
+      mask: radial-gradient(circle at 0.55rem 0, #000 0.5rem, transparent 0.53rem) 0 0 / 1.1rem 0.6rem;
+      pointer-events: none;
+    }
+
+    // the close button: a thin white ring
+    .btn--icon {
+      border: 1.5px solid #fff;
+      color: #fff;
+
+      @include m.hover {
+        background: #ffffff2e;
+      }
+    }
+  }
+
+  &__title {
+    font: 800 1.3rem / 1.1 var(--font-wide);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
   }
 }
 

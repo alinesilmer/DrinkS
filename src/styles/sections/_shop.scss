@@ -1,137 +1,90 @@
 @use "../abstracts/mixins" as m;
 
-// Productos: a header in the style of the logo, a sticky bar of photo chips, the product
-// grid, a promo band.
+// Productos, like a gallery: a light grey plaster wall (header in components/_page-hero.scss), hairlines, white
+// prints taped up close together, five to a row.
 .shop {
+  // the colour of the wall, also the strip of the categories so the prints slide away beneath it
+  --shop-bg: var(--wall);
   padding-top: 0;
-  background: var(--shop-bg);
+  // the plaster: an even grain over the grey, the same everywhere (and in the wave of the footer)
+  background: #{m.wall()};
 
+  // the wall starts under a wave of the yellow stripes of the header
   &__body {
     position: relative;
-    padding: 0 var(--gutter) clamp(3rem, m.vw(6), 5rem);
-  }
-
-  // the top half is the page, the bottom half the colour of the band: the tilt shows a wedge of cream
-  // above it and a wedge of its own colour below, which then runs straight into the footer
-  &__promo {
-    overflow: clip;
-    padding-block: 3rem 5rem;
-    background: linear-gradient(var(--shop-bg) 50%, var(--burnt) 50%);
-
-    // no shadow under the band, so it runs cleanly into the footer
-    .band {
-      box-shadow: none;
-    }
-  }
-}
-
-// Burnt orange, cream lettering and a splash of warm petals: the logo, made into a page header.
-.shop-hero {
-  position: relative;
-  min-height: min(70svh, 40rem);
-  display: grid;
-  align-items: end;
-  overflow: hidden;
-  background: var(--burnt);
-  color: var(--vanilla);
-
-  &__burst {
-    position: absolute;
-
-    &--big {
-      top: 50%;
-      right: -12%;
-      width: clamp(24rem, m.vw(60), 52rem);
-      translate: 0 -46%;
-    }
-
-    &--small {
-      bottom: -9%;
-      left: -7%;
-      width: clamp(10rem, m.vw(24), 20rem);
-    }
-
-    @include m.phone {
-      &--big {
-        right: -45%;
-        opacity: 0.8;
-      }
-    }
-  }
-
-  &__content {
-    position: relative;
-    padding: calc(var(--nav-height) + 2rem) var(--gutter) clamp(3rem, m.vw(6), 5rem);
-  }
-
-  // small spaced capitals, like the line above the home hero word
-  &__kicker {
-    font: 800 clamp(0.75rem, m.vw(1.1), 0.9rem) / 1 var(--font-body);
-    letter-spacing: 0.34em;
-    text-transform: uppercase;
-    opacity: 0.85;
-  }
-
-  &__title {
-    max-width: 11ch;
-    margin-top: 0.8rem;
-    font: 400 clamp(3rem, m.vw(8), 6.6rem) / 0.95 var(--font-display);
-    text-shadow: 0.04em 0.05em 0 var(--burnt-deep);
-    text-wrap: balance;
+    // a slim side margin: the grid takes nearly the whole width
+    padding: clamp(2.5rem, #{m.vw(5)}, 4.5rem) clamp(0.75rem, #{m.vw(2.2)}, 2rem) clamp(2.5rem, #{m.vw(5)}, 4rem);
+    @include m.wave-top(#{m.stripe-fill(var(--sun), var(--sun-deep))});
   }
 }
 
 .shop-grid {
   position: relative;
   display: grid;
-  gap: 2rem;
+  gap: clamp(2rem, m.vw(4.5), 3.75rem);
   scroll-margin-top: var(--nav-height);
 
-  // the name of what you are looking at, and how many there are
+  // the search, on the right
   &__head {
     display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem;
+    justify-content: flex-end;
+
+    // the search is just a line to write on
+    .search {
+      width: min(100%, 24rem);
+      padding-inline: 0;
+      border-width: 0 0 1px;
+      border-color: color-mix(in srgb, var(--night) 40%, transparent);
+      border-radius: 0;
+      background: none;
+      color: var(--night);
+
+      &:focus-within {
+        border-color: var(--burnt);
+      }
+    }
   }
 
-  &__title {
-    color: var(--burnt);
-    font: var(--display-weight) clamp(1.8rem, #{m.vw(3.4)}, 2.8rem) / 1 var(--font-display);
+  &__empty {
+    display: grid;
+    justify-items: center;
+    gap: 0.75rem;
+    padding: 4rem 1rem;
+    color: var(--night);
+    text-align: center;
+
+    p {
+      font: 600 1.6rem var(--font-premium);
+    }
   }
 
-  &__count {
-    color: var(--burnt);
-    font: 800 0.75rem var(--font-body);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-
+  // hung close together, five to a row (four, then two on the narrower screens)
   &__cards {
     display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: 1.25rem 1rem;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1.25rem 0.6rem;
 
-    @include m.tablet {
+    @include m.laptop {
       grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 
-    @include m.phone {
+    // the prints are wide now: two across on phones and small tablets
+    @include m.tablet {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 1.5rem 0.75rem;
+      gap: 1.6rem 0.8rem;
     }
   }
 }
 
-// Sticky row of plain text tabs, "Todo" first: big capitals, the chosen one in burnt orange with
-// a dot under it. A cream strip runs edge to edge so the products slide away beneath it.
+// Sticky row of plain text tabs, "Todo" first: wide capitals like the title of the page, the chosen one in burnt orange
+// with a dot under it. A white strip runs edge to edge so the products slide away beneath it.
 .category-bar {
   position: sticky;
   z-index: 30;
   top: calc(var(--nav-height) + 0.25rem);
   display: flex;
   justify-content: safe center;
-  gap: clamp(1.25rem, #{m.vw(4)}, 3rem);
+  gap: clamp(1.25rem, m.vw(4), 3rem);
   padding-top: 0.75rem;
   overflow-x: auto;
   background: var(--shop-bg);
@@ -148,21 +101,21 @@
     bottom: 0;
     left: -100vmax;
     height: 1px;
-    background: color-mix(in srgb, var(--burnt) 25%, transparent);
+    background: color-mix(in srgb, var(--night) 18%, transparent);
   }
 
   &__item {
     @include m.active-mark(var(--burnt), ".is-active");
     flex: none;
     padding: 0.5rem 0.1rem 1.3rem;
-    @include m.print(1.7rem, 1);
-    letter-spacing: 0.05em;
+    font: 800 0.9rem / 1 var(--font-wide);
+    letter-spacing: 0.04em;
     text-transform: uppercase;
-    opacity: 0.4;
+    opacity: 0.85;
     transition: opacity 0.2s, color 0.2s;
 
     @include m.hover {
-      opacity: 0.75;
+      opacity: 1;
     }
 
     &.is-active {

@@ -4,10 +4,20 @@ import { type IconName } from "@/components/ui/iconPaths";
 export const CONTACT = {
   title: "Contacto",
   channels: [
-    { icon: "chat", label: "WhatsApp", value: "+54 11 0000-0000", href: "https://wa.me/541100000000" },
+    { icon: "chat", label: "WhatsApp", value: "+54 379 000-0000", href: "https://wa.me/543790000000" },
     { icon: "mail", label: "Mail", value: "hola@drinks.example", href: "mailto:hola@drinks.example" },
-    { icon: "clock", label: "Horario", value: "Todos los días, 12 a 21 h" },
+    { icon: "bag", label: "Dirección", value: "Entregas en Corrientes Capital" },
   ] satisfies { icon: IconName; label: string; value: string; href?: `https://${string}` | `mailto:${string}` }[],
+  /** The handwritten note on the label, one word per line. */
+  note: ["Sin", "compromiso"],
+  /** Two facts at the foot of the label, separated by a hairline. */
+  facts: [
+    { label: "Atención", value: "12 a 21 h" },
+    { label: "Respuesta", value: "En el día" },
+  ],
+  cta: "Escribinos ahora",
+  formTitle: "Escribinos",
+  close: "Cerrar",
   letter: {
     greeting: "Hola, DrinkS:",
     name: "Me llamo",

@@ -1,2 +1,2 @@
-export type SectionId = "top" | "sabores" | "verano" | "recetas" | "noche" | "contacto";
+export type SectionId = "top" | "sabores" | "verano" | "recetas" | "contacto";
 

@@ -1,17 +1,13 @@
-// The DrinkS logo (components/ui/Logo.tsx): an orange badge that works on light and dark.
+// The DrinkS wordmark (components/ui/Logo.tsx): transparent, so it sits on stripes, glass or paper.
 .logo {
   display: block;
   height: 2.7rem;
   width: auto;
-  aspect-ratio: 4 / 3;
-  border-radius: 0.55rem;
-  transition:
-    rotate 0.4s var(--spring),
-    scale 0.3s;
+  aspect-ratio: 434 / 143;
+  transition: scale 0.3s;
 }
 
 a:hover .logo,
 a:focus-visible .logo {
-  rotate: -3deg;
   scale: 1.06;
 }

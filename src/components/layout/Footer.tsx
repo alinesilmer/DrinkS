@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { ButtonLink } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { Logo } from "@/components/ui/Logo";
-import { PetalBurst } from "@/components/ui/PetalBurst";
 import { NAV_LINKS, ROUTES } from "@/app/routes";
 import { FOOTER } from "@/data/content";
 import { CONTACT } from "@/data/contactContent";
@@ -11,10 +10,12 @@ import { CONTACT } from "@/data/contactContent";
 export function Footer() {
   return (
     <footer className="site-footer">
-      <PetalBurst className="site-footer__burst" />
       <div className="site-footer__inner">
         <div className="site-footer__top">
-          <p className="site-footer__line">{FOOTER.line}</p>
+          <p className="site-footer__line">
+            <span className="site-footer__words">{FOOTER.line}</span>
+            <span className="site-footer__script">{FOOTER.script}</span>
+          </p>
           <ButtonLink variant="primary" href={ROUTES.products}>
             {FOOTER.cta}
           </ButtonLink>

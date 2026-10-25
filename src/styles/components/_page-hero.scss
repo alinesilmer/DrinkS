@@ -1,0 +1,54 @@
+@use "../abstracts/mixins" as m;
+
+// The header of a quiet page (components/ui/PageHero.tsx): the title in wide capitals and a cursive line, centred on
+// pastel yellow awning stripes (a yellow and a darker one).
+// It follows the cover: a small line with a rule under it, the wide capitals, the cursive line over their foot.
+.page-hero {
+  position: relative;
+  overflow: clip;
+  @include m.stripes(var(--sun), var(--sun-deep));
+  color: var(--sun-ink);
+  text-align: center;
+
+  &__content {
+    position: relative;
+    padding: calc(var(--nav-height) + clamp(2.5rem, m.vw(6), 5rem)) var(--gutter) clamp(2.5rem, m.vw(5.5), 4.5rem);
+  }
+
+  // small spaced capitals above the title, in the wide face of the cover
+  &__kicker {
+    color: var(--sun-ink);
+    font: 700 clamp(0.8rem, #{m.vw(1.5)}, 1.5rem) / 1 var(--font-wide);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+
+    // a rule the width of the headline
+    &::after {
+      content: "";
+      display: block;
+      width: min(78%, 60rem);
+      margin: clamp(0.7rem, 2vh, 1.3rem) auto 0;
+      border-top: 3px solid var(--sun-ink);
+    }
+  }
+
+  // the headline of the cover: wide capitals, tight, with a cursive line leaning under it
+  &__title {
+    max-width: 16ch;
+    margin: clamp(0.5rem, 1.5vh, 1rem) auto 0;
+    color: var(--sun-ink);
+    font: 800 clamp(2.4rem, m.vw(7), 6.4rem) / 1 var(--font-wide);
+    letter-spacing: -0.045em;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  &__script {
+    display: block;
+    margin-top: -0.1em;
+    color: var(--sun-script);
+    font: 400 clamp(3rem, m.vw(10), 8.6rem) / 1 var(--font-cal);
+    letter-spacing: 0;
+    text-transform: none;
+  }
+}

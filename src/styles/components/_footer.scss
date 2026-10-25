@@ -1,57 +1,75 @@
 @use "../abstracts/mixins" as m;
 
-// The footer: one big promise, the shop in four short columns, the small print.
+// The footer, on cobalt awning stripes: one promise in wide lime capitals with a cursive word, the shop in four
+// short columns, the small print. Lime and cream lettering.
 .site-footer {
-  padding: clamp(3rem, m.vw(7), 5.5rem) var(--gutter) 1.5rem;
+  padding: clamp(3rem, #{m.vw(7)}, 5.5rem) var(--gutter) 1.5rem;
   position: relative;
   overflow: clip;
-  background: var(--burnt-deep);
-  color: var(--vanilla);
-  // the page above ends in the cream of the shop and contact pages, or the colour of the cover
-  @include m.wave-top(var(--footer-from, var(--shop-bg)));
+  @include m.stripes(var(--cobalt), var(--cobalt-deep));
+  color: var(--cream);
+  // the page above ends in the white of Productos and Contacto, or the colour of the cover
+  @include m.wave-top(var(--footer-from, var(--white)));
 
-  // on Inicio the section above is the night, in the page colour
-  // (and on Productos, the promo band is)
-  :root[data-theme="blue"] &,
+  // on Inicio the section above is "Por qué DrinkS" (cobalt stripes); on Productos it is the wall of the gallery
+  :root[data-theme="blue"] & {
+    --footer-from: #{m.stripe-fill(var(--cobalt), var(--cobalt-deep))};
+  }
+
+  // on Contacto it is the label's pink and red stripes
+  :root[data-theme="green"] & {
+    --footer-from: #{m.stripe-fill(var(--rose), var(--rose-deep))};
+  }
+
+  // on Recetas it is the album, on the green stripes
+  // on Productos it is the grey wall
   :root[data-theme="orange"] & {
-    --footer-from: var(--burnt);
+    --footer-from: #{m.wall()};
   }
 
-  // the splash of petals of the logo, half out of the page
-  &__burst {
-    position: absolute;
-    top: -8.5rem;
-    right: -3%;
-    width: clamp(13rem, #{m.vw(26)}, 24rem);
+  :root:has(.dusk) & {
+    --footer-from: #{m.stripe-fill(var(--leaf), var(--leaf-deep))};
   }
 
-  // the call to action is cream on this ground
   .btn--primary {
-    background: var(--vanilla);
-    color: var(--burnt);
+    padding: 1.25em 3.2em;
   }
 
   &__inner {
     position: relative;
     display: grid;
-    gap: clamp(2rem, m.vw(5), 3.5rem);
+    gap: clamp(2rem, #{m.vw(5)}, 3.5rem);
     max-width: 72rem;
     margin-inline: auto;
   }
 
+  // the promise, centred, with the button under it
   &__top {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
+    display: grid;
+    justify-items: center;
     gap: 1.5rem;
-    padding-bottom: clamp(2rem, m.vw(5), 3.5rem);
-    border-bottom: 1px solid #f5e9d02e;
+    padding-block: clamp(1rem, #{m.vw(3)}, 2rem) clamp(2rem, #{m.vw(5)}, 3.5rem);
+    border-bottom: 3px solid var(--lime);
+    text-align: center;
   }
 
   &__line {
-    font: var(--display-weight) clamp(2.4rem, m.vw(7), 5rem) / 0.95 var(--font-display);
-    color: var(--vanilla);
+    color: var(--lime);
+    font-weight: 400;
+  }
+
+  &__words {
+    display: block;
+    font: 800 clamp(2.4rem, #{m.vw(7.4)}, 7rem) / 1 var(--font-wide);
+    letter-spacing: -0.06em;
+    text-transform: uppercase;
+  }
+
+  &__script {
+    display: block;
+    margin-top: -0.12em;
+    color: var(--cream);
+    font: 400 clamp(3.4rem, #{m.vw(9)}, 8.6rem) / 1 var(--font-cal);
   }
 
   &__cols {
@@ -75,33 +93,39 @@
     gap: 0.75rem;
 
     .logo {
-      height: 6.5rem;
+      height: 5rem;
     }
 
     p {
       max-width: 18ch;
-      opacity: 0.75;
+      color: var(--lime);
+      font: 700 0.85rem / 1.3 var(--font-wide);
+      text-transform: uppercase;
     }
   }
 
   &__title {
-    margin-bottom: 0.9rem;
-    color: var(--petal-peach);
-    @include m.print(1.15rem);
-    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    color: var(--lime);
+    font: 800 0.72rem / 1 var(--font-wide);
+    letter-spacing: 0.2em;
     text-transform: uppercase;
   }
 
   &__list {
     display: grid;
-    gap: 0.55rem;
+    gap: 0.6rem;
     padding: 0;
     list-style: none;
     font-size: 0.95rem;
 
     a {
+      text-decoration: none;
+
       @include m.hover {
-        color: var(--petal-peach);
+        color: var(--lime);
+        text-decoration: underline;
+        text-underline-offset: 0.25em;
       }
     }
 
@@ -115,7 +139,7 @@
       flex: none;
       width: 1.1rem;
       height: 1.1rem;
-      color: var(--petal-peach);
+      color: var(--lime);
     }
   }
 
@@ -125,8 +149,8 @@
     justify-content: space-between;
     gap: 0.5rem 2rem;
     padding-top: 1.25rem;
-    border-top: 1px solid #f5e9d02e;
+    border-top: 1px solid #c8f56b59;
     font-size: 0.8rem;
-    opacity: 0.65;
+    opacity: 0.8;
   }
 }

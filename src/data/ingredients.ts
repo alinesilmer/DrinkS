@@ -41,7 +41,7 @@ export const INGREDIENT_GROUPS: IngredientGroup[] = [
     items: [
       { id: "grapefruit", label: "Gaseosa de pomelo", productId: "toronja" },
       { id: "tonic", label: "Agua tónica", productId: "tonica" },
-      { id: "ginger", label: "Ginger beer", productId: "ginger" },
+      { id: "ginger", label: "Ginger beer" },
       { id: "soda", label: "Agua con gas", productId: "soda" },
       { id: "lemon", label: "Gaseosa de limón" },
     ],

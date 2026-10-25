@@ -1,6 +1,6 @@
-// Mock delivery rule until the real one exists. Amounts in whole currency units.
+// Mock delivery rule until the real one exists. Amounts in whole Argentine pesos.
 export const DELIVERY = {
-  fee: 3,
+  fee: 3500,
   /** Orders at or above this subtotal ship free. */
-  freeFrom: 40,
+  freeFrom: 50000,
 };

@@ -16,16 +16,17 @@
 @use "components/tabs";
 @use "components/field";
 @use "components/site-frame";
-@use "components/petals";
+@use "components/page-hero";
 @use "components/footer";
 @use "components/drawer";
 @use "components/stepper";
 @use "components/media";
-@use "components/scene";
+@use "components/photo-glass";
+@use "components/garnish";
 
 @use "sections/dusk";
 @use "sections/recipe-book";
-@use "sections/recipe-detail";
+@use "sections/recipe-sheet";
 @use "sections/notepad";
 @use "sections/album";
 @use "sections/contact";
@@ -33,7 +34,6 @@
 @use "sections/shop";
 @use "sections/bag";
 @use "sections/hero";
-@use "sections/bands";
+@use "sections/flavors";
 @use "sections/mosaic";
 @use "sections/mosaic-glass";
-@use "sections/night";

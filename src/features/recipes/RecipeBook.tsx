@@ -5,6 +5,7 @@ import { StampSpread } from "@/features/recipes/StampSpread";
 import { indexIngredients, productsFor, rankRecipes } from "@/features/recipes/recipeLogic";
 import { useFlash } from "@/hooks/useFlash";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { isWiderThanTablet } from "@/lib/breakpoints";
 import { RECIPE_BOOK } from "@/data/content";
 import { type IngredientGroup, type IngredientId, type Recipe } from "@/types/catalog";
 
@@ -16,8 +17,6 @@ type TurnDirection = "forward" | "back";
 /** The turn lasts 1 s; the pages change at 450 ms, while the sheet stands nearly edge-on. */
 const TURN_MS = 1000;
 const SWAP_MS = 450;
-/** Below this width the pages stack and there is no sheet to turn (same as the tablet breakpoint). */
-const CAN_TURN = "(min-width: 821px)";
 
 interface RecipeBookProps {
   recipes: Recipe[];
@@ -28,8 +27,9 @@ interface RecipeBookProps {
 }
 
 /**
- * A stamp album: every recipe a stamp, the ones you can make first. Opening one turns to a
- * spread with the recipe. Every change turns a two-sided sheet over the spine (forward or back).
+ * A stamp album: every recipe a stamp, the ones you can make first. Turning the pages of the
+ * album turns a two-sided sheet over the spine; opening a stamp lays a paper notepad with the
+ * recipe in its place.
  */
 export function RecipeBook({ recipes, groups, have, spread, onSpread }: RecipeBookProps) {
   const [openId, setOpenId] = useState<string | null>(null);
@@ -50,47 +50,47 @@ export function RecipeBook({ recipes, groups, have, spread, onSpread }: RecipeBo
 
   const turnTo = (dir: TurnDirection, next: () => void) => {
     if (turning) return;
-    if (reduced || !matchMedia(CAN_TURN).matches) return next();
+    if (reduced || !isWiderThanTablet()) return next();
     setDirection(dir);
     startTurn();
     swap.current = window.setTimeout(next, SWAP_MS);
   };
 
   return (
-    <div className="book-wrap">
-      <div className="book" aria-live="polite">
-        {open ? (
-          <RecipeDetail
-            recipe={open.recipe}
-            have={have}
-            missing={open.missing}
-            buyable={productsFor(open.missing, ingredients)}
-            ingredients={ingredients}
-            onBack={() => turnTo("back", () => setOpenId(null))}
-          />
-        ) : (
-          <StampSpread
-            left={ranked.slice(first, first + PER_PAGE)}
-            right={ranked.slice(first + PER_PAGE, first + PER_PAGE * 2)}
-            perPage={PER_PAGE}
-            ghost={recipes[0]}
-            onOpen={(id) => turnTo("forward", () => setOpenId(id))}
-          />
-        )}
-        {turning && (
-          <div className={`book__sheet book__sheet--${direction}`} aria-hidden="true">
-            <span className="book__face book__face--front" />
-            <span className="book__face book__face--back" />
-          </div>
-        )}
-      </div>
-      {!open && (
-        <Pager
-          page={current}
-          pages={spreads}
-          onChange={(p) => turnTo(p > current ? "forward" : "back", () => onSpread(p))}
-          label={RECIPE_BOOK.pages}
+    <div className="book-wrap" aria-live="polite">
+      {open ? (
+        <RecipeDetail
+          recipe={open.recipe}
+          have={have}
+          missing={open.missing}
+          buyable={productsFor(open.missing, ingredients)}
+          ingredients={ingredients}
+          onBack={() => setOpenId(null)}
         />
+      ) : (
+        <>
+          <div className="book">
+            <StampSpread
+              left={ranked.slice(first, first + PER_PAGE)}
+              right={ranked.slice(first + PER_PAGE, first + PER_PAGE * 2)}
+              perPage={PER_PAGE}
+              ghost={recipes[0]}
+              onOpen={setOpenId}
+            />
+            {turning && (
+              <div className={`book__sheet book__sheet--${direction}`} aria-hidden="true">
+                <span className="book__face book__face--front" />
+                <span className="book__face book__face--back" />
+              </div>
+            )}
+          </div>
+          <Pager
+            page={current}
+            pages={spreads}
+            onChange={(p) => turnTo(p > current ? "forward" : "back", () => onSpread(p))}
+            label={RECIPE_BOOK.pages}
+          />
+        </>
       )}
     </div>
   );

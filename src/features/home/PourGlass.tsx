@@ -1,30 +1,33 @@
 import { type MutableRefObject, type RefObject, useEffect, useRef } from "react";
+import { GLASS_PHOTO } from "@/data/media";
 import { prefersReducedMotion } from "@/hooks/useReducedMotion";
 import { clamp, ease, span } from "@/lib/math";
 
-// The big glass of the cover. It tips as `progress` (0 → 1, the pinned scroll) grows, the ice
-// slides to the lip and falls, and the drink pours out. The liquid is a wavy path that stays
+// The big glass of the cover. It tips as `progress` (0 → 1, the pinned scroll) grows and the
+// drink pours out. The liquid is a wavy path that stays
 // level, sloshes on a spring when the pointer moves or the glass tilts, and drops to the lip once
 // the lip dips below the fill line. Coordinates are in the glass's own units.
-const LIP = [105, -110] as const;
-const REST = -74;
+const LIP = [98, -110] as const;
+const REST = -70;
 const MAX_TILT = 100;
-const TILT = [0.05, 0.58] as const;
-const DRY = [0.78, 0.92] as const;
+const TILT = [0.04, 0.5] as const;
+const DRY = [0.62, 0.78] as const;
 const STREAM = { width: 15, length: 1100 };
 const SWAY = 6;
 const WAVE = 3;
 const HALF_WIDTH = 340;
 
-const CUBES = [
-  { x: -50, y: -10, spin: 220, size: 52, opacity: 0.62 },
-  { x: 42, y: 6, spin: -260, size: 46, opacity: 0.54 },
-  { x: -6, y: 52, spin: 320, size: 44, opacity: 0.62 },
-  { x: 66, y: 58, spin: -190, size: 38, opacity: 0.5 },
-].map((cube, i) => ({ ...cube, at: 0.26 + i * 0.08 }));
+// The inside of the bowl of the photo of the glass (public/media/glass2.webp): the liquid is clipped to it.
+const BOWL = "M-90-110C-114-70-122-30-119 5C-114 50-70 84 0 87C70 84 114 50 119 5C122-30 113-70 96-110Z";
 
-const BOWL = "M-105-110C-150-20-110 120 0 125C110 120 150-20 105-110Z";
-
+// Where the photo sits in the glass's own units: 1122 × 1402 px at 0.333 per px, the axis of the glass on x = 0
+// and the centre of its rim on y = -110 (the slice of orange is part of the photo; the lip it pours from is the
+// right end of the rim). The photo was lightened
+// inside the bowl (the glass is milky there) so the drink behind it keeps its colour.
+// The glass stands under the headline of the cover, and tips about the same point.
+const RIG = { y: 660, scale: 1.14 };
+const GLASS = { src: GLASS_PHOTO, x: -194.8, y: -191.6, width: 373.6, height: 466.9 };
+const GLASS_IMAGE = <image href={GLASS.src} x={GLASS.x} y={GLASS.y} width={GLASS.width} height={GLASS.height} />;
 const tiltAt = (p: number) => ease(span(p, TILT[0], TILT[1]));
 
 const lipAt = (angle: number) => {
@@ -52,12 +55,15 @@ export function PourGlass({ progress, host }: PourGlassProps) {
   useEffect(() => {
     const hostEl = host.current;
     const svg = root.current;
-    const find = <T extends Element>(selector: string) => svg?.querySelector<T>(selector) ?? null;
-    const [rigEl, liquidEl, streamEl] = [find("[data-rig]"), find("[data-liquid]"), find("[data-stream]")];
-    if (!hostEl || !svg || !rigEl || !liquidEl || !streamEl) return undefined;
-    // the parts that tip with the glass, and the ice
+    if (!hostEl || !svg) return undefined;
+    const rigEl = svg.querySelector("[data-rig]");
+    const edgeEl = svg.querySelector("[data-edge]");
+    // the drink is three paths with the same outline (colour, depth, sides), the stream is three strokes (edge, body, core)
+    const liquidEls = [...svg.querySelectorAll("[data-liquid]")];
+    const streamEls = [...svg.querySelectorAll<SVGPathElement>("[data-stream]")];
+    if (!rigEl || !edgeEl || liquidEls.length === 0 || streamEls.length === 0) return undefined;
+    // the parts that tip with the glass
     const tipping = [...svg.querySelectorAll("[data-tip]")];
-    const cubes = [...svg.querySelectorAll("[data-cube]")];
 
     const s = { hover: 0, target: 0, slope: 0, v: 0, energy: 0, a: 0 };
 
@@ -91,32 +97,35 @@ export function PourGlass({ progress, host }: PourGlassProps) {
       const slope = s.slope * (ly > REST ? 0.3 : 1);
       const amp = WAVE * (0.7 + s.energy * 3.5);
 
-      rigEl.setAttribute("transform", `translate(${500 - 50 * tilt} ${545 - 100 * tilt}) scale(1.75)`);
+      rigEl.setAttribute("transform", `translate(${500 - 50 * tilt} ${RIG.y - 100 * tilt}) scale(${RIG.scale})`);
       tipping.forEach((el) => el.setAttribute("transform", `rotate(${a})`));
 
-      let d = `M${-HALF_WIDTH} 2000`;
+      let edge = "";
       for (let x = -HALF_WIDTH; x <= HALF_WIDTH; x += 17) {
         const wave = amp * (Math.sin(x * 0.03 + t * 2.3) + 0.5 * Math.sin(x * 0.055 - t * 3.4));
-        d += `L${x} ${(surface + slope * x + wave).toFixed(1)}`;
+        edge += `${x === -HALF_WIDTH ? "M" : "L"}${x} ${(surface + slope * x + wave).toFixed(1)}`;
       }
-      liquidEl.setAttribute("d", `${d}L${HALF_WIDTH} 2000Z`);
+      // the body of the drink hangs from its surface; the surface itself also gets a thin bright line (the meniscus)
+      const body = `${edge.replace("M", `M${-HALF_WIDTH} 2000L`)}L${HALF_WIDTH} 2000Z`;
+      liquidEls.forEach((el) => el.setAttribute("d", body));
+      edgeEl.setAttribute("d", edge);
 
       const grow = span(p, POUR_STARTS, POUR_STARTS + 0.16);
-      streamEl.setAttribute("d", `M${lx} ${ly}q26 2 30 60v${STREAM.length * grow}`);
-      streamEl.setAttribute("stroke-width", String(STREAM.width * Math.min(1, grow * 4) * (1 - span(p, DRY[0], DRY[1]))));
-
-      const [cos, sin] = [Math.cos((a * Math.PI) / 180), Math.sin((a * Math.PI) / 180)];
-      CUBES.forEach((cube, i) => {
-        const tt = span(p, cube.at, cube.at + 0.3);
-        const k = ease(Math.min(1, tt * 3));
-        const fall = Math.max(0, tt - 0.33) / 0.67;
-        const x0 = cube.x * cos - cube.y * sin + Math.sin(t * 0.9 + i * 2) * 3;
-        const y0 = cube.x * sin + cube.y * cos + Math.sin(t * 1.6 + i * 1.9) * 4;
-        const turn = a + cube.spin * tt + Math.sin(t * 1.1 + i) * 8 + i * 20;
-        cubes[i]?.setAttribute(
-          "transform",
-          `translate(${x0 + (lx - x0) * k + fall * 40} ${y0 + (ly - y0) * k + fall * fall * 950}) rotate(${turn})`,
-        );
+      const width = STREAM.width * Math.min(1, grow * 4) * (1 - span(p, DRY[0], DRY[1]));
+      // the stream leaves the lip in an arc, then falls and sways a little as it goes
+      const fall = STREAM.length * grow;
+      const SEGMENTS = 14;
+      let path = `M${lx} ${ly}C${lx + 24} ${ly - 2} ${lx + 38} ${ly + 22} ${lx + 40} ${ly + 70}`;
+      let prev = 0;
+      for (let k = 1; k <= SEGMENTS; k++) {
+        const sway = Math.sin(t * 3.2 + k * 0.8) * 3.2 * Math.min(1, k / 4);
+        path += `l${(sway - prev).toFixed(2)} ${(fall / SEGMENTS).toFixed(1)}`;
+        prev = sway;
+      }
+      streamEls.forEach((el) => {
+        el.setAttribute("d", path);
+        el.setAttribute("stroke-width", String(width * Number(el.dataset.k)));
+        el.setAttribute("transform", `translate(${(width * Number(el.dataset.dx)).toFixed(2)} 0)`);
       });
     };
 
@@ -138,50 +147,48 @@ export function PourGlass({ progress, host }: PourGlassProps) {
   return (
     <svg ref={root} className="pour" viewBox="200 0 600 1000" aria-hidden="true" focusable="false">
       <defs>
-        <linearGradient id="pour-drink" gradientUnits="userSpaceOnUse" x1="0" y1="-90" x2="0" y2="125">
+        {/* the colour: light at the surface, deeper below */}
+        <linearGradient id="pour-drink" gradientUnits="userSpaceOnUse" x1="0" y1="-100" x2="0" y2="96">
           <stop offset="0" style={{ stopColor: "var(--pop-light)" }} />
-          <stop offset="0.5" style={{ stopColor: "var(--pop)" }} />
-          <stop offset="1" style={{ stopColor: "var(--pop)", stopOpacity: 0.85 }} />
+          <stop offset="0.35" style={{ stopColor: "var(--pop)" }} />
+          <stop offset="1" style={{ stopColor: "color-mix(in srgb, var(--pop) 90%, #b83a00)" }} />
         </linearGradient>
+        {/* depth: the drink darkens towards the bottom of the glass */}
+        <linearGradient id="pour-depth" gradientUnits="userSpaceOnUse" x1="0" y1="-100" x2="0" y2="100">
+          <stop offset="0" stopColor="#fff" stopOpacity="0.2" />
+          <stop offset="0.3" stopColor="#fff" stopOpacity="0" />
+          <stop offset="1" style={{ stopColor: "var(--ink)" }} stopOpacity="0.16" />
+        </linearGradient>
+        {/* the sides: the drink darkens where it meets the glass, and catches a little light on the left */}
+        <linearGradient id="pour-side" gradientUnits="userSpaceOnUse" x1="-130" y1="0" x2="130" y2="0">
+          <stop offset="0" style={{ stopColor: "var(--ink)" }} stopOpacity="0.2" />
+          <stop offset="0.14" style={{ stopColor: "var(--ink)" }} stopOpacity="0" />
+          <stop offset="0.26" stopColor="#fff" stopOpacity="0.14" />
+          <stop offset="0.38" stopColor="#fff" stopOpacity="0" />
+          <stop offset="0.86" style={{ stopColor: "var(--ink)" }} stopOpacity="0" />
+          <stop offset="1" style={{ stopColor: "var(--ink)" }} stopOpacity="0.18" />
+        </linearGradient>
+        {/* the stream is softened a little, so it melts into the colours around it */}
+        <filter id="pour-soft" filterUnits="userSpaceOnUse" x="-500" y="-500" width="1000" height="2600">
+          <feGaussianBlur stdDeviation="1.8" />
+        </filter>
         <clipPath id="pour-bowl">
           <path data-tip d={BOWL} />
         </clipPath>
       </defs>
-      <g data-rig transform="translate(500 545) scale(1.75)">
-        <g data-tip>
-          <path d="M-6 122V228C-6 240-88 242-88 254H88C88 242 6 240 6 228V122Z" fill="#fff" opacity=".9" />
-          <path d={BOWL} fill="#fff" opacity=".4" />
-          <line x1="-10" y1="92" x2="-58" y2="-222" stroke="#fff" strokeWidth="12" strokeLinecap="round" />
-          <line x1="-10" y1="92" x2="-58" y2="-222" stroke="#D2491C" strokeWidth="12" strokeDasharray="12 12" />
-        </g>
+      <g data-rig transform={`translate(500 ${RIG.y}) scale(${RIG.scale})`}>
         <g clipPath="url(#pour-bowl)">
-          <path data-liquid fill="url(#pour-drink)" opacity=".97" />
+          <path data-liquid fill="url(#pour-drink)" />
+          <path data-liquid fill="url(#pour-depth)" />
+          <path data-liquid fill="url(#pour-side)" />
+          <path data-edge className="pour__edge" fill="none" strokeLinecap="round" />
         </g>
-        <path data-stream className="pour__stream" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-        {CUBES.map((cube, i) => (
-          <g key={i} data-cube>
-            <rect
-              x={-cube.size / 2}
-              y={-cube.size / 2}
-              width={cube.size}
-              height={cube.size}
-              rx="10"
-              fill="#fff"
-              opacity={cube.opacity}
-              stroke="#fff"
-              strokeWidth="3"
-            />
-          </g>
-        ))}
-        <g data-tip>
-          <path d={BOWL} fill="none" stroke="#fff" strokeWidth="4" />
-          <path d="M-104-40C-108 20-84 74-44 98" fill="none" stroke="#fff" strokeWidth="6" strokeLinecap="round" opacity=".75" />
-          <g transform="translate(-106 -114) rotate(-18)">
-            <circle r="42" fill="#FBF3E2" stroke="#F78F3F" strokeWidth="6" />
-            <circle r="30" fill="#F78F3F" />
-            <path d="M0-30V30M-30 0H30M-21-21L21 21M21-21L-21 21" stroke="#FBF3E2" strokeWidth="3.5" />
-          </g>
+        <g fill="none" strokeLinecap="round" strokeLinejoin="round" filter="url(#pour-soft)">
+          <path data-stream data-k="1.14" data-dx="0" className="pour__stream pour__stream--edge" />
+          <path data-stream data-k="1" data-dx="0" className="pour__stream" />
+          <path data-stream data-k="0.3" data-dx="-0.2" className="pour__stream pour__stream--core" />
         </g>
+        <g data-tip>{GLASS_IMAGE}</g>
       </g>
     </svg>
   );

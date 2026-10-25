@@ -1,26 +1,9 @@
-// Photos, video backdrops and the film grain that makes everything feel shot on film.
+// Photos and the film grain that makes everything feel shot on film.
 .photo {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-.backdrop {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  pointer-events: none;
-}
-
-// A darkening/warming layer over a photo or video, so text on it stays readable.
-.scrim {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: var(--scrim, linear-gradient(#14273a40, #14273a00 40%, #14273a8c));
 }
 
 // Film grain over the whole site: a tiny noise texture, barely there.

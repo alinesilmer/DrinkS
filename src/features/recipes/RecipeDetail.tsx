@@ -18,8 +18,8 @@ interface RecipeDetailProps {
 }
 
 /**
- * One recipe as a magazine spread: title, a small label and the ingredients on the left page;
- * the big stamp, the steps and a button to buy what is missing on the framed right page.
+ * One recipe on a pad of paper: a cardboard top with the way back, the stamp and the buy button
+ * in a side strip, and the title, the ticked ingredients and the steps on ruled lines.
  */
 export function RecipeDetail({ recipe, have, missing, buyable, ingredients, onBack }: RecipeDetailProps) {
   const { add } = useCart();
@@ -31,17 +31,17 @@ export function RecipeDetail({ recipe, have, missing, buyable, ingredients, onBa
   };
 
   return (
-    <>
-      <div className="book__page book__page--left recipe-detail recipe-detail--left">
-        <Button variant="link" onClick={onBack}>
+    <article className="sheet">
+      <div className="sheet__paper">
+        <Button variant="link" className="sheet__back" onClick={onBack}>
           {RECIPE_BOOK.back}
         </Button>
-        <h3 className="book__title">{recipe.name}</h3>
-        <p className="recipe-detail__meta">
-          {recipe.glassLabel} · {recipe.minutes} min
-        </p>
-        <div className="recipe-detail__needs">
-          <h4 className="book__subtitle">{RECIPE_BOOK.ingredients}</h4>
+        <h3 className="sheet__title">{recipe.name}</h3>
+        <div className="sheet__stamp">
+          <RecipeStamp recipe={recipe} large />
+        </div>
+        <section className="sheet__needs">
+          <h4 className="sheet__label">{RECIPE_BOOK.ingredients}</h4>
           <ul className="check-list">
             {recipe.needs.map((id) => (
               <CheckItem key={id} checked={have.has(id)} note={have.has(id) ? undefined : RECIPE_BOOK.missing}>
@@ -49,27 +49,25 @@ export function RecipeDetail({ recipe, have, missing, buyable, ingredients, onBa
               </CheckItem>
             ))}
           </ul>
+        </section>
+        <section className="sheet__steps">
+          <h4 className="sheet__label">{RECIPE_BOOK.steps}</h4>
+          <ol className="sheet__list">
+            {recipe.steps.map((step) => (
+              <li key={step}>{step}</li>
+            ))}
+          </ol>
+        </section>
+        <div className="sheet__action">
+          {missing.length === 0 && <p className="sheet__ready">{RECIPE_BOOK.allSet}</p>}
+          {missing.length > 0 && buyable.length === 0 && <p className="sheet__note">{RECIPE_BOOK.notSold}</p>}
+          {buyable.length > 0 && (
+            <Button variant="primary" disabled={added} onClick={buy}>
+              {added ? RECIPE_BOOK.added : plural(buyable.length, RECIPE_BOOK.buyOne, RECIPE_BOOK.buyMany)}
+            </Button>
+          )}
         </div>
       </div>
-
-      <div className="book__page book__page--right book__page--framed recipe-detail">
-        <div className="recipe-detail__figure">
-          <RecipeStamp recipe={recipe} large />
-        </div>
-        <h4 className="book__subtitle">{RECIPE_BOOK.steps}</h4>
-        <ol className="recipe-detail__steps">
-          {recipe.steps.map((step) => (
-            <li key={step}>{step}</li>
-          ))}
-        </ol>
-        {missing.length === 0 && <p className="recipe-detail__ready">{RECIPE_BOOK.allSet}</p>}
-        {missing.length > 0 && buyable.length === 0 && <p className="book__empty">{RECIPE_BOOK.notSold}</p>}
-        {buyable.length > 0 && (
-          <Button variant="primary" disabled={added} onClick={buy}>
-            {added ? RECIPE_BOOK.added : plural(buyable.length, RECIPE_BOOK.buyOne, RECIPE_BOOK.buyMany)}
-          </Button>
-        )}
-      </div>
-    </>
+    </article>
   );
 }

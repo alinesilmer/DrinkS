@@ -1,0 +1,180 @@
+@use "../abstracts/mixins" as m;
+
+// Elegí · Mezclá · Brindá, after the scroll of a product site: a screen that stays put (the section is
+// 4 screens tall and its child is sticky). The next colour waits as a strip at the right edge, then widens
+// and covers the screen; the giant word changes with it; the glass turns once at every change.
+// features/home/FlavorSpin.tsx writes --cut1 / --cut2 (left edge of the 2nd and 3rd colour, in %),
+// --spin (degrees of the glass), --p (0 → 1) and --drink on the section. The three colours are awning stripes.
+.flavors {
+  --cut1: 91;
+  --cut2: 100;
+  --spin: 0;
+  --p: 0;
+  --drink: #f78f3f;
+  position: relative;
+  height: 420vh;
+  background: var(--burnt);
+
+  &__pin {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: clip;
+  }
+
+  // each colour is a full screen with its word and its line; the 2nd and 3rd are cut from the left
+  &__panel {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+
+    // cobalt with lime letters
+    &--0 {
+      @include m.stripes(var(--burnt), var(--burnt-deep));
+      color: var(--lime);
+    }
+
+    // orange with white letters
+    &--1 {
+      @include m.stripes(var(--tangerine), #ff9a4d);
+      color: var(--white);
+      clip-path: inset(0 0 0 calc(var(--cut1) * 1%));
+    }
+
+    // lime with cobalt letters
+    &--2 {
+      @include m.stripes(var(--lime), #b5e84f);
+      color: var(--burnt-deep);
+      clip-path: inset(0 0 0 calc(var(--cut2) * 1%));
+    }
+  }
+
+  // on phones the word sits above the glass, so it can be read
+  @include m.tablet {
+    &__panel {
+      place-items: start center;
+      padding-top: calc(var(--nav-height) + 2rem);
+    }
+
+    &__word {
+      font-size: clamp(3.4rem, 17vw, 7rem);
+    }
+  }
+
+  // huge wide capitals behind the glass
+  &__word {
+    font: 800 clamp(5rem, #{m.vw(24)}, 24rem) / 0.8 var(--font-wide);
+    letter-spacing: -0.07em;
+    text-transform: uppercase;
+  }
+
+  // the slices and leaves go over the glass here
+  .garnish {
+    z-index: 4;
+  }
+
+  // the glass, in the middle, turning around its own axis
+  &__stage {
+    position: absolute;
+    z-index: 3;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+    perspective: 1400px;
+  }
+
+  // everything on the stage turns together; each screen shows a different glass
+  &__spin {
+    display: grid;
+    place-items: center;
+    transform: rotateY(calc(var(--spin) * 1deg));
+  }
+
+  &__glass {
+    display: none;
+    grid-area: 1 / 1;
+    height: auto;
+    filter: drop-shadow(0 2rem 1.5rem #0b244766);
+
+    // Elegí: the tall glass
+    &--0 {
+      width: min(54vh, 34rem, 76vw);
+    }
+
+    // Mezclá: the short glass, wide and low
+    &--1 {
+      width: min(58vh, 36rem, 80vw);
+    }
+
+    // Brindá: the two together, leaning in to touch
+    &--2 {
+      width: min(86vh, 56rem, 92vw);
+      aspect-ratio: 10 / 7;
+    }
+  }
+
+  // the first glass is the one shown until the scroll says otherwise
+  &:not([data-slide="1"]):not([data-slide="2"]) &__glass--0,
+  &[data-slide="1"] &__glass--1 {
+    display: block;
+  }
+
+  &[data-slide="2"] &__glass--2 {
+    display: grid;
+    place-items: center;
+  }
+
+  &__toast {
+    grid-area: 1 / 1;
+    height: auto;
+
+    &--left {
+      width: 50%;
+      translate: -36% 4%;
+      rotate: 7deg;
+    }
+
+    &--right {
+      width: 39%;
+      translate: 37% 0;
+      rotate: -8deg;
+    }
+  }
+
+  // the drink takes the colour of the word, and its surface has a thin bright line
+  &__drink {
+    fill: var(--drink);
+    transition: fill 0.6s;
+  }
+
+  &__edge {
+    fill: none;
+    stroke: #fff;
+    stroke-opacity: 0.5;
+    stroke-width: 7;
+    stroke-linecap: round;
+  }
+
+  // less motion: three colour screens one after the other, with no glass
+  @media (prefers-reduced-motion: reduce) {
+    height: auto;
+
+    &__pin {
+      position: static;
+      height: auto;
+    }
+
+    &__panel {
+      position: relative;
+      min-height: 70vh;
+      clip-path: none;
+    }
+
+    .garnish,
+    &__stage {
+      display: none;
+    }
+  }
+}

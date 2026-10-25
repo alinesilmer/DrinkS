@@ -1,17 +1,16 @@
 // Copy for the shop page and the bag. Few, strong words.
-import { DELIVERY } from "@/data/delivery";
-import { SCENES } from "@/data/homeScenes";
-import { price } from "@/lib/text";
 
 export const SHOP = {
   kicker: "La tienda",
-  title: "Todo para tu bar en casa",
-  promo: { word: "Envío gratis", line: `En pedidos desde ${price(DELIVERY.freeFrom)}. Hielo siempre de regalo.`, scene: SCENES.choose, tone: "burnt" as const },
+  title: "Todo para tu bar",
+  script: "en casa",
   all: "Todo",
   allTitle: "Todo el bar",
   count: { one: "1 producto", many: "# productos" },
   add: "Agregar",
   filter: "Categorías",
+  results: "Resultados",
+  search: { label: "Buscar productos", placeholder: "Buscá tu bebida", none: "No encontramos nada con eso.", clear: "Ver todo" },
 };
 
 export const BAG = {

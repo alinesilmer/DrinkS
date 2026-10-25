@@ -1,6 +1,6 @@
 import { BRAND } from "@/data/brand";
 
-/** The DrinkS logo: cream lettering and petals on burnt orange (public/brand/logo.webp). */
-export function Logo() {
-  return <img className="logo" src="/brand/logo.webp" alt={BRAND.name} width={720} height={540} decoding="async" />;
+/** The DrinkS wordmark (public/brand): white on the dark bars and stripes, black on paper. */
+export function Logo({ tone = "light" }: { tone?: "light" | "dark" }) {
+  return <img className="logo" src={`/brand/logo-${tone}.webp`} alt={BRAND.name} width={360} height={119} decoding="async" />;
 }

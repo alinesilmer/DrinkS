@@ -1,0 +1,24 @@
+// The slices and leaves that float around a glass (features/home/Garnish.tsx). The section that holds them
+// writes --p (0 → 1, its scroll progress): they drift up or down and turn as it grows.
+.garnish {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+
+  &__bit {
+    position: absolute;
+    top: var(--y);
+    left: var(--x);
+    width: var(--w);
+    translate: -50% calc((0.5 - var(--p, 0)) * var(--rise) * 1vh);
+    rotate: calc(var(--p, 0) * var(--turn) * 1deg);
+    filter: drop-shadow(0 1.2rem 0.9rem #0b244755);
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  }
+}

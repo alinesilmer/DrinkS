@@ -10,6 +10,31 @@ html {
   scroll-behavior: smooth;
 }
 
+// The scrollbar in the blue of the awnings: a slim, rounded cobalt thumb on deep navy that brightens when you reach for it.
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #2f74c4 var(--ink);
+}
+
+::-webkit-scrollbar {
+  width: 0.8rem;
+  height: 0.8rem;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--ink);
+}
+
+::-webkit-scrollbar-thumb {
+  border: 0.2rem solid var(--ink);
+  border-radius: 999rem;
+  background: linear-gradient(90deg, #3d86d8, #1d5fae);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, #6aa8ec, #2f74c4);
+}
+
 body {
   margin: 0;
   background: var(--night);

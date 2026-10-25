@@ -1,24 +1,50 @@
 @use "../abstracts/mixins" as m;
 
-// Shop product, the usual way: a white card with a thin border, the photo, name, size, price, and
-// a full-width "Agregar" button that turns into − n + (and a coloured edge) once it is in the cart.
+// Shop product (features/shop/ProductCard.tsx), a print taped to a white wall: a strip of tape on top, the name
+// in serif capitals, the photo on a beige mat, one line about it, then the size, the price and a round "+"
+// (which turns into − n + in the cart). The prints hang a little crooked.
 .product-card {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  padding: 0.6rem 0.6rem 0.75rem;
-  border: 1px solid #14273a1f;
-  border-radius: 0.9rem;
+  min-width: 0;
+  padding: 0.9rem 0.9rem 0.75rem;
+  border-radius: 0.2rem;
   background: var(--white);
   color: var(--night);
+  // layered, so it reads as depth: a tight edge, a soft body, a long faint fall
+  box-shadow:
+    0 1px 2px #14273a26,
+    0 0.45rem 0.9rem -0.3rem #14273a2e,
+    0 1.4rem 2rem -1rem #14273a47;
   opacity: 0;
   transform: translateY(1rem);
   transition:
     opacity 0.5s ease calc(var(--i) * 60ms),
     transform 0.6s ease calc(var(--i) * 60ms),
-    box-shadow 0.2s,
-    border-color 0.2s;
+    translate 0.35s ease,
+    box-shadow 0.35s ease;
+
+  // the tape
+  &::before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    top: -0.5rem;
+    left: 50%;
+    width: 4.2rem;
+    height: 1.1rem;
+    translate: -50% 0;
+    rotate: -2deg;
+    background: #ffffffb3;
+    box-shadow: 0 1px 3px #14273a33;
+  }
+
+  &:nth-child(5n + 1) { rotate: -0.8deg; }
+  &:nth-child(5n + 2) { rotate: 0.5deg; }
+  &:nth-child(5n + 3) { rotate: -0.4deg; }
+  &:nth-child(5n + 4) { rotate: 0.7deg; }
+  &:nth-child(5n) { rotate: -0.6deg; }
 
   &.is-in {
     opacity: 1;
@@ -31,76 +57,119 @@
   }
 
   @include m.hover {
-    border-color: color-mix(in srgb, var(--burnt) 50%, transparent);
-    box-shadow: 0 0.8rem 1.4rem -1rem #14273a73;
+    rotate: 0deg;
+    translate: 0 -0.3rem;
+    box-shadow:
+      0 1px 2px #14273a26,
+      0 0.7rem 1.2rem -0.3rem #14273a38,
+      0 2rem 2.6rem -1rem #14273a59;
+
+    .photo {
+      scale: 1.05;
+    }
   }
 
-  &__media {
-    aspect-ratio: 1;
-    overflow: hidden;
-    border-radius: 0.6rem;
-    background: var(--shop-bg);
-  }
-
-  &__info {
-    flex: 1;
-    display: grid;
-    align-content: start;
-    gap: 0.15rem;
-    padding-inline: 0.2rem;
-  }
-
+  // the name sits in a two-line slot that grows upwards, so every photo starts at the same height
   &__name {
-    font: 700 0.9rem / 1.25 var(--font-body);
+    display: grid;
+    place-items: end center;
+    height: 2.1em;
+    margin: 0.2rem 0 0.6rem;
+    overflow: hidden;
+    font: 700 1.35rem / 1.05 var(--font-premium);
+    letter-spacing: 0.14em;
+    text-align: center;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  // the photo on a beige mat
+  &__media {
+    position: relative;
+    aspect-ratio: 4 / 4.5;
+    overflow: clip;
+    background: var(--mat);
+
+    // pinned to the mat, so every photo is the same size whatever its own shape
+    .photo {
+      position: absolute;
+      inset: 0.7rem;
+      width: calc(100% - 1.4rem);
+      height: calc(100% - 1.4rem);
+      transition: scale 0.6s ease;
+    }
+  }
+
+  // one line about it
+  &__note {
+    min-height: 2.3em;
+    margin-top: 0.7rem;
+    font: 500 0.95rem / 1.15 var(--font-premium);
+    letter-spacing: 0.06em;
+    text-align: center;
+    text-transform: uppercase;
+    text-wrap: balance;
+    opacity: 0.8;
   }
 
   &__size {
-    font-size: 0.78rem;
+    margin-bottom: 0.4rem;
+    font: 800 0.58rem / 1 var(--font-body);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
     opacity: 0.6;
   }
 
-  &__price {
-    margin-top: 0.25rem;
-    font: 800 1.15rem var(--font-body);
+  &__buy {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: auto;
+    padding-top: 0.7rem;
+    border-top: 1px solid #14273a2e;
   }
 
-  // the clear way to buy
+  &__price {
+    min-width: 0;
+    font: 700 1.75rem / 1 var(--font-premium);
+    font-variant-numeric: lining-nums tabular-nums;
+
+    @include m.phone {
+      font-size: 1.45rem;
+    }
+  }
+
+  // a thin ring that fills with the page colour when you reach for it
   &__add {
-    width: 100%;
-    gap: 0.4rem;
-    padding: 0.7em 0.5em;
-    border-radius: 0.6rem;
-    background: var(--burnt);
-    color: var(--vanilla);
-    font: 800 0.85rem var(--font-body);
-    transition: background 0.2s;
+    width: 2.4rem;
+    height: 2.4rem;
+    flex: none;
+    border: 1.5px solid var(--night);
+    border-radius: 50%;
+    color: var(--night);
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
 
     @include m.hover {
-      background: var(--burnt-deep);
+      background: var(--night);
+      color: #fff;
     }
 
     .icon {
-      width: 1rem;
-      height: 1rem;
+      width: 1.05rem;
+      height: 1.05rem;
     }
   }
 
-  // once in the cart: the same width, − n +
   .stepper {
-    width: 100%;
-    padding: 0.2rem;
-    border-radius: 0.6rem;
-    background: color-mix(in srgb, var(--burnt) 12%, transparent);
-    color: var(--burnt);
+    padding: 0.15rem;
+    background: color-mix(in srgb, var(--night) 10%, transparent);
+    color: var(--night);
 
     .btn--icon {
       width: 2rem;
       height: 2rem;
-      border-radius: 0.45rem;
-    }
-
-    .stepper__value {
-      font-size: 0.95rem;
+      border-radius: 50%;
     }
   }
 }

@@ -6,13 +6,14 @@ import { CONTACT } from "@/data/contactContent";
 
 const { letter } = CONTACT;
 
-/** The contact form as a handwritten letter lying on the sand. */
+/** The contact form as a page of a ruled notepad: every line of it sits on a printed line. */
 export function LetterForm({ form }: { form: ContactFormState }) {
   const { values, errors, status, change, submit } = form;
   const sending = status === "sending";
 
   return (
     <form className="letter" noValidate onSubmit={submit}>
+      <span className="letter__top" aria-hidden="true" />
       <p className="letter__greeting">{letter.greeting}</p>
       <TextField look="line" id="name" label={letter.name} value={values.name} onChange={change("name")}
         maxLength={LIMITS.name} error={errors.name} autoComplete="name" />

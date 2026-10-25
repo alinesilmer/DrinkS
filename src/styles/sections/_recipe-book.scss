@@ -17,8 +17,8 @@
   }
 }
 
-// An open magazine: a dark left page, a framed right
-// page, a thin rim all round. Pages curve into the spine and a sheet turns over it.
+// An open magazine on the cream of the notepad: a left page, a framed right
+// page, a thin dark rim all round. Pages curve into the spine and a sheet turns over it.
 .book {
   position: relative;
   z-index: 1;
@@ -30,10 +30,8 @@
   color: var(--book-ink);
   box-shadow: 0 3.5rem 6rem -2.5rem #000b;
   // how a left and a right page look: pages and the turning sheet share them
-  --page-left:
-    radial-gradient(90% 55% at 0% 100%, color-mix(in srgb, var(--petal-amber) 30%, transparent), transparent 70%),
-    linear-gradient(160deg, var(--burnt), var(--burnt-deep) 70%);
-  --page-right: linear-gradient(200deg, var(--burnt), var(--burnt-deep) 70%);
+  --page-left: linear-gradient(160deg, var(--paper), #f3e9d2 90%);
+  --page-right: linear-gradient(200deg, var(--paper), #f3e9d2 90%);
   // a flat perspective: the turning sheet reads as 3D but stays inside the book
   perspective: 420rem;
 
@@ -72,14 +70,14 @@
       grid-column: 1;
       border-radius: 0.7rem 0 0 0.7rem;
       background: var(--page-left);
-      box-shadow: inset -1.5rem 0 1.5rem -1rem #000a;
+      box-shadow: inset -1.5rem 0 1.5rem -1rem #0b244744;
     }
 
     &--right {
       grid-column: 2;
       border-radius: 0 0.7rem 0.7rem 0;
       background: var(--page-right);
-      box-shadow: inset 1.5rem 0 1.5rem -1rem #000a;
+      box-shadow: inset 1.5rem 0 1.5rem -1rem #0b244744;
     }
 
     // a thin frame printed on the page, like the photo page of the reference
@@ -87,7 +85,7 @@
       content: "";
       position: absolute;
       inset: 0.85rem;
-      border: 1px solid color-mix(in srgb, var(--petal-amber) 60%, transparent);
+      border: 1px solid #0b244733;
       border-radius: 0.35rem;
       pointer-events: none;
     }
@@ -157,7 +155,7 @@
       content: "";
       position: absolute;
       inset: 0.85rem;
-      border: 1px solid color-mix(in srgb, var(--petal-amber) 60%, transparent);
+      border: 1px solid #0b244733;
       border-radius: 0.35rem;
     }
 
@@ -186,17 +184,17 @@
     }
   }
 
-  // big, cream, centred: the title of a recipe page
+  // big, in ink, centred: the title of a recipe page
   &__title {
     font: var(--display-weight) clamp(2.2rem, m.vw(4.6), 3.6rem) / 1 var(--font-display);
-    color: var(--vanilla);
+    color: var(--ink);
     text-align: center;
     text-wrap: balance;
   }
 
   &__subtitle {
     margin-bottom: 0.3rem;
-    color: var(--melon);
+    color: var(--burnt);
     font: 800 0.72rem / 1 var(--font-body);
     letter-spacing: 0.3em;
     text-transform: uppercase;
@@ -206,12 +204,12 @@
     opacity: 0.7;
   }
 
-  // ticks and notes on the dark pages
+  // ticks and notes on the cream pages
   .check__box {
-    border-color: #f5e9d099;
+    border-color: #0b244799;
   }
 
   .check__note {
-    color: var(--melon);
+    color: var(--chili);
   }
 }

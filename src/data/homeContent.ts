@@ -1,18 +1,19 @@
-import { SCENES } from "@/data/homeScenes";
-
 // Copy and media for Inicio. Few strong words; the photos do the talking.
 export const HOME_HERO = {
-  /** The headline, split to sit on either side of the glass. */
-  left: "Bebidas bien frías,",
-  right: "a tu puerta",
-  cta: "Ver productos",
+  kicker: "Armá tu trago",
+  /** The headline in wide capitals, and the cursive line under it. */
+  title: "Bebidas bien frías",
+  script: "a tu puerta",
+  /** Two short notes, one on each side of the glass. */
+  leftNote: "Destilados, gaseosas, fruta y hielo",
+  rightNote: "Hielo siempre de regalo",
 };
 
-/** Tilted colour bands, like a summer poster: word, line, drawn cocktail scene, colour. */
+/** The three screens of the scroll: the word, and the colour of the drink in the glass while it is on. */
 export const BANDS = [
-  { word: "Elegí", line: "Destilados, gaseosas, fruta y hielo.", scene: SCENES.choose, tone: "burnt" },
-  { word: "Mezclá", line: "Recetas fáciles con lo que ya tenés.", scene: SCENES.mix, tone: "peach" },
-  { word: "Brindá", line: "Llega bien frío. Vos solo servís.", scene: SCENES.toast, tone: "orange" },
+  { word: "Elegí", drink: "#f78f3f" },
+  { word: "Mezclá", drink: "#b794f4" },
+  { word: "Brindá", drink: "#f26b8a" },
 ] as const;
 
 /** "Por qué DrinkS": the three promises, each beside a layer of the glass. */
@@ -25,8 +26,3 @@ export const MOSAIC = {
     { big: "2", unit: "kg", title: "de hielo gratis", text: "En cada pedido, siempre." },
   ],
 } as const;
-
-export const NIGHT = {
-  line: "La noche pide hielo",
-  cta: "Pedir ahora",
-};

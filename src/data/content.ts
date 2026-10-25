@@ -1,5 +1,3 @@
-import { type SectionId } from "@/types/content";
-import { type IconName } from "@/components/ui/iconPaths";
 
 // Copy shared across the site. Few strong words. Page-specific copy lives next to it
 // (homeContent, shopContent, contactContent).
@@ -23,10 +21,11 @@ export const RECIPE_BOOK = {
   pages: "Páginas de recetas",
 };
 
-export const NAV = { bag: "Carrito", sections: "Secciones", main: "Principal", home: "DrinkS, inicio" };
+export const NAV = { bag: "Carrito", sections: "Secciones", main: "Principal", menu: "Abrir el menú", closeMenu: "Cerrar el menú", home: "DrinkS, inicio" };
 
 export const FOOTER = {
-  line: "Bien frío, siempre.",
+  line: "Bien frío,",
+  script: "siempre.",
   cta: "Ver productos",
   blurb: "Tu bar en casa.",
   navTitle: "Navegá",
@@ -39,10 +38,3 @@ export const FOOTER = {
 
 export const STATUS = { loading: "Sirviendo…", error: "No pudimos cargar la tienda. Intentá de nuevo." };
 
-export const SECTIONS: { id: SectionId; label: string; icon: IconName }[] = [
-  { id: "top", label: "Amanecer", icon: "sunrise" },
-  { id: "sabores", label: "Sabores", icon: "waves" },
-  { id: "verano", label: "Verano", icon: "sunrise" },
-  { id: "recetas", label: "Recetas", icon: "sunset" },
-  { id: "noche", label: "Noche", icon: "moon" },
-];

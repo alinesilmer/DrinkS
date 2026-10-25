@@ -4,7 +4,9 @@
 :root {
   // The size of the whole interface. Every length is in rem (or goes through m.vw / m.vmin),
   // so this one number scales the entire site. 1 = 100%, 0.9 = 90%.
-  --ui-scale: 0.9;
+  --ui-scale: #{m.$ui-scale};
+  // the tablet breakpoint, for the scripts that need the same one as the stylesheets (lib/breakpoints.ts)
+  --bp-tablet: #{m.bp(820px)};
 
   --vanilla: #f5e9d0;
   --melon: #f78f3f;
@@ -12,10 +14,35 @@
   --marine: #35566f;
   --night: #14273a;
   --paper: #fbf3e2;
-  --shop-bg: #fbf6ec; // warm off-white of the shop
-  // the colours of the logo: burnt orange ground, four warm petals
+  --shop-bg: #fbf6ec; // warm off-white of the contact page and the bag
+  --mat: #efe9df; // the beige mat a print is mounted on
+  // the awning design: cobalt stripes, lime lettering, orange pops, deep ink
+  --cobalt: #1d5fae;
+  --cobalt-deep: #174b8c;
+  --lime: #c8f56b;
+  // the green awning stripes of Recetas
+  --leaf: #2f8a58;
+  --leaf-deep: #256f47;
+  // the yellow awning stripes of the header of Productos
+  --sun: #ffec9e;
+  --sun-deep: #f7cf4a;
+  // the brown of the lettering on them
+  --sun-ink: #6b4700;
+  --sun-script: #9a6200;
+  // the wall of the shop: a light, even grey, a little lighter than plaster so the white prints stand out from it
+  --wall: #f2f1ee;
+  --tangerine: #ff7a2f;
+  --ink: #0b2447;
+  --cream: #fff7e6;
+  // the paper of the side panels: a whiter cream
+  --ticket: #fffbf2;
+  // the stripes of Contacto: the pink of the drink of Brindá and a raspberry red that sits well beside it
+  --rose: #f26b8a;
+  --rose-deep: #d92b4b;
+  // the colours of the logo: burnt orange ground
   --burnt: #bd4f20;
   --burnt-deep: #8f3a15; // its shadow, and the footer
+  // the warm colours of the logo, used by the notepad and the album
   --petal-orange: #fb6a22;
   --petal-amber: #ffa62b;
   --petal-salmon: #fc7b50;
@@ -30,6 +57,9 @@
   --font-display: "Caprasimo", Georgia, serif;
   --font-print: "Bebas Neue", "Arial Narrow", sans-serif;
   --font-script: "Pacifico", cursive;
+  --font-premium: "Cormorant Garamond", Georgia, serif;
+  --font-wide: "Unbounded Variable", "Arial Black", sans-serif;
+  --font-cal: "Pinyon Script", cursive;
   --font-body: "DM Sans Variable", system-ui, sans-serif;
   --display-weight: 400;
   --display-tracking: -0.01em;
@@ -41,19 +71,27 @@
   --section-pad: clamp(4.375rem, #{m.vw(10)}, 8.125rem);
   --radius-pill: 999rem;
   --spring: cubic-bezier(0.3, 1.6, 0.5, 1);
-  --nav-height: 5.25rem;
+  --nav-height: 4.6rem;
+}
+
+// On tablets and phones the interface goes back to the size it was drawn at: small type is only comfortable to read
+// when the screen is held close.
+@include m.tablet {
+  :root {
+    --ui-scale: #{m.$design-scale};
+  }
 }
 
 // Every page wears the same design in its own palette: orange is the logo (Productos), blue is
 // Inicio, green is Contacto. useRouteTheme sets data-theme on <html>.
 :root[data-theme="blue"] {
-  --burnt: #1f6fa8;
-  --burnt-deep: #14507c;
+  --burnt: var(--cobalt);
+  --burnt-deep: var(--cobalt-deep);
   --petal-orange: #3aa0e6;
   --petal-amber: #8fd8f5;
   --petal-salmon: #5d8bea;
   --petal-peach: #b4def7;
-  --pop: #fb7a2a;
+  --pop: var(--tangerine);
   --pop-light: #ffc99a;
 }
 

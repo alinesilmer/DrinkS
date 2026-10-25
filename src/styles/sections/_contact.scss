@@ -1,71 +1,190 @@
 @use "../abstracts/mixins" as m;
 
-// Contacto, in the style of the logo: the same burnt orange header with its petals as
-// Productos, then a cream page with the ways to reach us and a form on a retro offset shadow.
+// Contacto: one printed label, like a bar's label for a cocktail, on awning stripes of pink and raspberry red. Cream paper a little crooked, a
+// serif title with the logo, the channels in serif, a small glass with a note written by hand, two facts and the button.
+// The button opens the letter (the notepad form) in a panel from the right.
 .contact {
-  padding-top: 0;
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
   overflow: clip;
+  padding: calc(var(--nav-height) + 2.5rem) var(--gutter) clamp(4rem, #{m.vw(8)}, 7rem);
+  @include m.stripes(var(--rose), var(--rose-deep));
+  color: var(--ink);
+}
 
-  &__hero {
-    position: relative;
-    min-height: min(46svh, 26rem);
-    display: grid;
-    align-items: end;
-    overflow: hidden;
-    background: var(--burnt);
-    color: var(--vanilla);
+.contact-label {
+  position: relative;
+  z-index: 3;
+  width: min(92rem, 100%);
+  padding: clamp(2rem, #{m.vw(4.2)}, 4.6rem) clamp(1.6rem, #{m.vw(4.8)}, 5.2rem) clamp(1.6rem, #{m.vw(3.4)}, 3.4rem);
+  overflow: hidden;
+  border-radius: 0.3rem;
+  background: var(--paper);
+  box-shadow:
+    0 1px 2px #0b244744,
+    0 1.8rem 2.6rem -1rem #0b244799;
+  rotate: -1.3deg;
+
+  // the light and shade of a window across the paper
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, transparent 36%, #0b244712 36% 52%, transparent 52%);
+    pointer-events: none;
   }
 
-  &__burst {
-    position: absolute;
+  @include m.tablet {
+    rotate: 0deg;
+  }
 
-    &--big {
-      top: 50%;
-      right: -12%;
-      width: clamp(22rem, m.vw(54), 46rem);
-      translate: 0 -46%;
-    }
+  &__top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.5rem;
 
-    &--small {
-      bottom: -9%;
-      left: -7%;
-      width: clamp(9rem, m.vw(22), 18rem);
-    }
-
-    @include m.phone {
-      &--big {
-        right: -45%;
-        opacity: 0.8;
-      }
+    .logo {
+      height: clamp(3.4rem, #{m.vw(5.4)}, 5.2rem);
     }
   }
 
   &__title {
-    position: relative;
-    padding: calc(var(--nav-height) + 2rem) var(--gutter) clamp(3rem, m.vw(6), 5rem);
-
-    .heading {
-      max-width: 11ch;
-      margin-top: 0.8rem;
-      font: 400 clamp(3rem, m.vw(8), 6.6rem) / 0.95 var(--font-display);
-      text-shadow: 0.04em 0.05em 0 var(--burnt-deep);
-    }
+    font: 700 clamp(3.4rem, #{m.vw(7.8)}, 7.4rem) / 0.95 var(--font-premium);
+    letter-spacing: 0.01em;
   }
 
-  &__body {
-    padding: clamp(3rem, m.vw(6), 5rem) var(--gutter) clamp(4rem, m.vw(8), 6rem);
-    background: var(--shop-bg);
-    color: var(--night);
+  &__rule {
+    width: 62%;
+    height: 1px;
+    margin: clamp(1rem, #{m.vw(1.6)}, 1.8rem) 0 clamp(1.4rem, #{m.vw(2.4)}, 2.6rem);
+    background: #0b244770;
   }
 
-  &__grid {
+  // the channels on the left, a small glass in the middle, a note on the right
+  &__cols {
     display: grid;
-    grid-template-columns: 0.9fr 1.1fr;
-    gap: clamp(2.5rem, m.vw(6), 5rem);
-    align-items: start;
+    grid-template-columns: 1.25fr 0.7fr 0.6fr;
+    align-items: center;
+    gap: 2rem;
 
     @include m.tablet {
+      grid-template-columns: 1fr 0.5fr;
+      gap: 1.2rem;
+    }
+
+    @include m.phone {
       grid-template-columns: 1fr;
     }
+  }
+
+  &__list {
+    display: grid;
+    gap: clamp(1.2rem, #{m.vw(1.8)}, 1.9rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  &__name {
+    display: block;
+    margin-bottom: 0.5rem;
+    font: 800 0.9rem / 1 var(--font-body);
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  &__value {
+    display: block;
+    color: inherit;
+    font: 700 clamp(2rem, #{m.vw(3.2)}, 3.1rem) / 1 var(--font-premium);
+    overflow-wrap: anywhere;
+    text-decoration: none;
+  }
+
+  a.contact-label__value {
+    transition: color 0.2s;
+
+    @include m.hover {
+      color: var(--cobalt);
+    }
+  }
+
+  &__glass {
+    width: 100%;
+    max-width: 16rem;
+    height: auto;
+    justify-self: center;
+    filter: drop-shadow(0 1rem 0.9rem #0b244755);
+
+    @include m.phone {
+      display: none;
+    }
+  }
+
+  &__drink {
+    fill: #f26b8a;
+  }
+
+  // the handwritten note, a little turned
+  &__note {
+    display: grid;
+    justify-items: center;
+    font: 400 clamp(2.6rem, #{m.vw(4.2)}, 4rem) / 1 var(--font-cal);
+    rotate: -7deg;
+
+    @include m.tablet {
+      display: none;
+    }
+  }
+
+  // two facts and the button, between hairlines
+  &__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.2rem 2rem;
+    margin-top: clamp(1.8rem, #{m.vw(3)}, 3rem);
+    padding-top: clamp(1.2rem, #{m.vw(1.8)}, 1.9rem);
+    border-top: 1px solid #0b244770;
+  }
+
+  &__facts {
+    display: flex;
+    margin: 0;
+
+    div {
+      padding-inline: 2.1rem;
+      border-left: 1px solid #0b244770;
+
+      &:first-child {
+        padding-left: 0;
+        border-left: 0;
+      }
+    }
+
+    dt {
+      font: 800 0.85rem / 1 var(--font-body);
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      opacity: 0.65;
+    }
+
+    dd {
+      margin: 0.7rem 0 0;
+      font: 600 italic clamp(1.8rem, #{m.vw(2.4)}, 2.3rem) / 1 var(--font-premium);
+    }
+  }
+}
+
+// the letter, in a panel from the right
+.contact-drawer {
+  &__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.6rem 1.5rem 2rem;
   }
 }

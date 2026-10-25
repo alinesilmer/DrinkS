@@ -1,94 +1,100 @@
 @use "../abstracts/mixins" as m;
 
-// One floating capsule in the burnt orange of the logo (the logo's own background blends into
-// it): logo, the three pages in cream capitals, the bag.
+// One long frosted-glass bar, fixed to the top of the screen on every page and always in view: the logo on the
+// left, the three pages in wide white capitals in the middle (a dot under the one you are on), the bag on the
+// right as a lime ring.
 .navbar {
   position: fixed;
   z-index: 50;
   inset: 0 0 auto;
   display: flex;
   justify-content: center;
-  padding: 0.75rem var(--gutter) 0;
-  pointer-events: none;
-  transition: transform 0.45s var(--spring), opacity 0.3s;
-
-  &.is-hidden {
-    transform: translateY(-140%);
-    opacity: 0;
-  }
-
-  // keyboard users always see where focus is
-  &.is-hidden:focus-within {
-    transform: none;
-    opacity: 1;
-  }
+  padding: 0.7rem var(--gutter);
+  border-bottom: 1px solid #c8f56b40;
+  // glass: a dark tint you can see through, blurred and a little more colourful, with a bright hairline on top
+  background: color-mix(in srgb, #000 42%, transparent);
+  -webkit-backdrop-filter: blur(1.1rem) saturate(1.6);
+  backdrop-filter: blur(1.1rem) saturate(1.6);
+  box-shadow: inset 0 1px 0 #ffffff26;
+  color: var(--lime);
 
   &__capsule {
-    width: min(100%, 44rem);
-    display: flex;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    justify-content: space-between;
     gap: 1rem;
-    padding: 0.4rem 0.4rem 0.4rem 0.5rem;
-    border-radius: var(--radius-pill);
-    background: var(--burnt);
-    box-shadow:
-      0 0 0 2px #f5e9d04d,
-      0 0.35rem 0 -0.05rem var(--burnt-deep),
-      0 1rem 1.5rem -0.75rem #14273a80;
-    color: var(--vanilla);
-    pointer-events: auto;
 
-    // the cream bag button, its count in the dark
+    .navbar__tools {
+      justify-self: end;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    // the menu button only exists where the links do not fit
+    .navbar__menu {
+      display: none;
+    }
+
+    // the bag and the menu: a thin white ring that fills when you reach for it, its count in the other colours
     .btn--bag {
-      background: var(--vanilla);
-      color: var(--burnt);
+      width: 2.4rem;
+      height: 2.4rem;
+      border: 2px solid #fff;
+      background: transparent;
+      color: #fff;
+      transition: background 0.25s, color 0.25s;
+
+      @include m.hover {
+        background: #fff;
+        color: var(--ink);
+        transform: none;
+      }
     }
 
     .btn__badge {
-      background: var(--night);
-      color: var(--vanilla);
+      background: var(--tangerine);
+      color: var(--white);
     }
 
-    @include m.phone {
-      gap: 0.5rem;
-      padding-left: 0.4rem;
+    @include m.tablet {
+      grid-template-columns: 1fr auto;
+
+      .navbar__menu {
+        display: inline-flex;
+      }
     }
   }
 
   &__logo {
+    justify-self: start;
     color: inherit;
     text-decoration: none;
 
-    // a sticker: bigger than the bar, with a cream edge, turned a little
     .logo {
-      height: 3.6rem;
-      margin-block: -0.9rem;
-      border: 3px solid var(--vanilla);
-      border-radius: 0.75rem;
-      box-shadow: 0.15rem 0.25rem 0 var(--burnt-deep);
-      rotate: -4deg;
-
-      @include m.phone {
-        height: 3rem;
-        margin-block: -0.6rem;
-      }
+      height: 2.5rem;
     }
   }
 
   &__links {
     display: flex;
-    gap: clamp(0.25rem, m.vw(2), 1.5rem);
+    gap: clamp(1.1rem, #{m.vw(3.5)}, 3rem);
+
+    @include m.tablet {
+      display: none;
+    }
   }
 
   &__link {
-    @include m.active-mark(var(--petal-amber));
-    padding: 0.6em 0.5em 0.75em;
-    font: 800 0.75rem var(--font-body);
-    letter-spacing: 0.12em;
+    @include m.active-mark(var(--lime));
+    color: #fff;
+    padding: 0.6em 0.15em 0.9em;
+    font: 700 0.72rem / 1 var(--font-wide);
+    letter-spacing: 0.16em;
     text-decoration: none;
     text-transform: uppercase;
-    opacity: 0.65;
+    opacity: 0.78;
     transition: opacity 0.2s;
 
     @include m.hover {
@@ -98,47 +104,27 @@
     &.is-active {
       opacity: 1;
     }
-
-    @include m.phone {
-      padding-inline: 0.3em;
-      font-size: 0.68rem;
-      letter-spacing: 0.06em;
-    }
   }
 }
 
-// The day as four icons on the side: where you are on the home page.
-.rail {
-  position: fixed;
-  z-index: 40;
-  right: 0.875rem;
-  top: 50%;
-  translate: 0 -50%;
-  display: grid;
-  gap: 0.5rem;
-  padding: 0.5rem;
-  @include m.glass;
-  border-radius: var(--radius-pill);
-
-  &__link {
-    width: 2.125rem;
-    height: 2.125rem;
+// the pages in a panel from the right (phones and small tablets)
+.menu-drawer {
+  &__links {
     display: grid;
-    place-items: center;
-    border-radius: 50%;
-    color: var(--night);
-    opacity: 0.7;
-    transition: background 0.3s, color 0.3s, opacity 0.3s, transform 0.3s;
-
-    &.is-on {
-      background: var(--melon);
-      color: var(--night);
-      opacity: 1;
-      transform: scale(1.1);
-    }
+    padding: 1rem 1.5rem 2rem;
   }
 
-  @include m.tablet {
-    display: none;
+  &__link {
+    padding: 1.1rem 0;
+    border-bottom: 1px dashed #0b244744;
+    color: var(--ink);
+    font: 800 1.15rem / 1 var(--font-wide);
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+
+    &.is-active {
+      color: var(--cobalt);
+    }
   }
 }

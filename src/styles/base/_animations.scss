@@ -66,15 +66,10 @@
   }
 }
 
-// the petal burst: each petal blooms out of the centre, the whole burst turns slowly
-@keyframes bloom {
+// an opened recipe lands on the table: rises a little and settles
+@keyframes sheet-in {
   from {
-    scale: 0;
-  }
-}
-
-@keyframes revolve {
-  to {
-    rotate: 360deg;
+    opacity: 0;
+    transform: translateY(1.5rem) rotate(-0.8deg);
   }
 }

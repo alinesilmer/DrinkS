@@ -1,93 +1,71 @@
 @use "../abstracts/mixins" as m;
 
-// The contact form as a letter with a retro offset shadow, and the ways to reach us.
+// The contact form as a page of a ruled notepad.
+// Everything inside the page is a whole number of ruled lines (--line) tall, so each word of the
+// form rests on a printed line, like writing by hand.
 .letter {
+  --line: 2.25rem;
+  --pad-l: clamp(3.4rem, #{m.vw(6)}, 4.4rem);
+  --pad-r: clamp(1.25rem, #{m.vw(3)}, 2.5rem);
   position: relative;
   display: grid;
-  gap: 1.25rem;
-  padding: clamp(1.75rem, m.vw(3.5), 2.75rem);
-  border: 2px solid var(--burnt);
-  border-radius: 1.25rem;
-  background: var(--paper);
+  align-content: start;
+  padding: 0 var(--pad-r) var(--line) var(--pad-l);
+  border-radius: 0.2rem;
+  // cream paper with blue ruled lines, one at the foot of each line of the grid
+  background:
+    repeating-linear-gradient(transparent 0 calc(var(--line) - 1px), color-mix(in srgb, var(--marine) 30%, transparent) calc(var(--line) - 1px) var(--line)),
+    var(--paper);
   color: var(--night);
-  box-shadow: 0.6rem 0.6rem 0 var(--burnt);
+  // the sheets underneath, then the pad on the table
+  box-shadow:
+    0 0.3rem 0 -0.1rem color-mix(in srgb, var(--paper) 86%, var(--night)),
+    0 0.6rem 0 -0.2rem color-mix(in srgb, var(--paper) 74%, var(--night)),
+    0 2rem 2.5rem -1.2rem #14273a80;
 
+  // the pink margin line
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--pad-l) - 1.1rem);
+    width: 2px;
+    background: color-mix(in srgb, var(--chili) 45%, transparent);
+    pointer-events: none;
+  }
+
+  // the cardboard top of the pad, with its perforated edge
+  &__top {
+    height: var(--line);
+    margin: 0 calc(var(--pad-r) * -1) 0 calc(var(--pad-l) * -1);
+    border-bottom: 2px dashed color-mix(in srgb, var(--vanilla) 55%, transparent);
+    border-radius: 0.2rem 0.2rem 0 0;
+    background: linear-gradient(var(--burnt), var(--burnt-deep));
+  }
+
+  // two lines tall, written on the second one: paper behind it hides the first ruled line, so
+  // no line crosses the words (the one at the foot stays)
   &__greeting {
-    color: var(--burnt);
-    font: var(--display-weight) clamp(1.8rem, m.vw(3), 2.4rem) / 1 var(--font-display);
+    display: grid;
+    align-items: end;
+    height: calc(var(--line) * 2);
+    // one empty ruled line before the first field
+    margin: 0 calc(var(--pad-r) * -1) var(--line) 0;
+    padding: 0 var(--pad-r) 0.3rem 0;
+    background: linear-gradient(var(--paper) calc(100% - 1px), transparent 0);
+    font: 700 clamp(1.9rem, #{m.vw(3.2)}, 2.5rem) / 1 var(--font-premium);
+    letter-spacing: 0.04em;
   }
 
   .btn--primary {
     justify-self: start;
-    background: var(--burnt);
+    margin-block: calc(var(--line) / 2);
   }
 
   &__status {
-    min-height: 1.5em;
-    font-weight: 800;
-  }
-}
-
-.channels {
-  display: grid;
-  gap: 1.1rem;
-  padding: 0;
-  list-style: none;
-
-  // a card on an offset shadow, like the letter; links lift on hover
-  &__card {
-    display: flex;
-    align-items: center;
-    gap: 1.1rem;
-    padding: 1rem 1.25rem;
-    border: 2px solid var(--burnt);
-    border-radius: 1.1rem;
-    background: var(--paper);
-    box-shadow: 0.4rem 0.45rem 0 var(--burnt);
-    color: var(--night);
-    text-decoration: none;
-    transition: translate 0.2s, box-shadow 0.2s;
-  }
-
-  a.channels__card {
-    @include m.hover {
-      translate: -0.15rem -0.15rem;
-      box-shadow: 0.6rem 0.65rem 0 var(--burnt);
-    }
-  }
-
-  // a disc of the palette with the icon in cream
-  &__icon {
-    flex: none;
-    width: 3.4rem;
-    height: 3.4rem;
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-    background: var(--burnt);
-    color: var(--vanilla);
-
-    .icon {
-      width: 1.5rem;
-      height: 1.5rem;
-    }
-  }
-
-  &__text {
-    min-width: 0;
-  }
-
-  &__label {
-    display: block;
-    color: var(--burnt);
-    font: 800 0.72rem var(--font-body);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-
-  &__value {
-    display: block;
-    overflow-wrap: anywhere;
-    font: var(--display-weight) clamp(1.2rem, #{m.vw(2.2)}, 1.7rem) / 1.15 var(--font-display);
+    min-height: var(--line);
+    font-weight: 700;
+    line-height: var(--line);
   }
 }

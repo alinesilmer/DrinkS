@@ -1,79 +1,93 @@
 @use "../abstracts/mixins" as m;
 
-// Inicio: a tall cover with a pinned screen. The giant word sits behind a big glass that tips
-// and pours as you scroll; then two waves of colour flood up the screen into the next section.
+// Inicio: a tall cover with a pinned screen on cobalt awning stripes. The headline in lime capitals with a cursive
+// line, your slices and leaves, and a big glass that tips and pours as you scroll; then two waves flood up the
+// screen into the next section (orange, then the stripes of "Elegí · Mezclá · Brindá").
 .hero {
   position: relative;
-  height: 380vh;
+  height: 260vh;
 
   &__pin {
     position: sticky;
     top: 0;
     height: 100vh;
     overflow: hidden;
-    background: var(--burnt);
-    color: var(--vanilla);
+    @include m.stripes(var(--burnt), var(--burnt-deep));
+    color: var(--lime);
     touch-action: pan-y;
   }
 
-  // the splash of petals behind everything, growing as you scroll
-  &__burst {
+  // the headline: a small line, a rule, the wide capitals and the cursive line over their foot
+  &__copy {
     position: absolute;
-    top: 52%;
-    left: 50%;
-    width: min(96vmin, 780px);
-    transform: translate(-50%, -50%);
-    will-change: transform;
+    z-index: 4;
+    inset: calc(var(--nav-height) + clamp(1rem, 4vh, 2.5rem)) 0 auto;
+    padding-inline: var(--gutter);
+    text-align: center;
+    opacity: clamp(0, calc(1 - var(--p, 0) * 2.4), 1);
+    translate: 0 calc(var(--p, 0) * -9vh);
+    pointer-events: none;
   }
 
-  // the headline in two halves, one on each side of the glass; they drift outwards and fade as
-  // the glass tips (--p is the scroll progress, set by the cover)
-  &__title {
-    position: absolute;
-    z-index: 2;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    // the right side keeps clear of the side rail
-    padding-inline: var(--gutter) calc(var(--gutter) + 3.5rem);
-    pointer-events: none;
+  &__kicker {
+    font: 700 clamp(0.8rem, #{m.vw(1.5)}, 1.5rem) / 1 var(--font-wide);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
 
-    @include m.tablet {
-      flex-direction: column;
-      justify-content: flex-start;
-      gap: 0.2em;
-      padding-top: calc(var(--nav-height) + 1.5rem);
-      text-align: center;
+    // a rule the width of the headline
+    &::after {
+      content: "";
+      display: block;
+      width: min(78%, 80rem);
+      margin: clamp(0.7rem, 2vh, 1.3rem) auto 0;
+      border-top: 3px solid var(--lime);
     }
   }
 
-  &__side {
-    max-width: 8ch;
-    font: 400 clamp(2.4rem, #{m.vw(7)}, 6.4rem) / 0.95 var(--font-display);
-    text-shadow: 0.04em 0.05em 0 var(--burnt-deep);
-    opacity: clamp(0, calc(1 - var(--p, 0) * 2.4), 1);
+  &__headline {
+    margin-top: clamp(0.4rem, 1.5vh, 1rem);
+    font-weight: 400;
+  }
+
+  &__title {
+    display: block;
+    font: 800 clamp(2.6rem, #{m.vw(9)}, 8.4rem) / 1 var(--font-wide);
+    letter-spacing: -0.045em;
+    text-transform: uppercase;
     text-wrap: balance;
+  }
+
+  &__script {
+    display: block;
+    margin-top: -0.18em;
+    color: var(--cream);
+    font: 400 clamp(3.6rem, #{m.vw(13.3)}, 12.4rem) / 1 var(--font-cal);
+  }
+
+  // two short notes, one at each side of the glass
+  &__note {
+    position: absolute;
+    z-index: 4;
+    top: 68%;
+    width: min(15rem, 22vw);
+    font: 700 clamp(0.7rem, #{m.vw(1.2)}, 1.1rem) / 1.25 var(--font-wide);
+    text-transform: uppercase;
+    opacity: clamp(0, calc(1 - var(--p, 0) * 2.4), 1);
+    pointer-events: none;
 
     &--left {
-      text-align: left;
-      translate: calc(var(--p, 0) * -16vw) 0;
+      left: clamp(1rem, 6vw, 6rem);
+      translate: calc(var(--p, 0) * -10vw) 0;
     }
 
     &--right {
+      right: clamp(1rem, 6vw, 6rem);
       text-align: right;
-      translate: calc(var(--p, 0) * 16vw) 0;
+      translate: calc(var(--p, 0) * 10vw) 0;
     }
 
     @include m.tablet {
-      max-width: none;
-      font-size: clamp(2rem, 9vw, 3rem);
-
-      &--left,
-      &--right {
-        text-align: center;
-        translate: 0 calc(var(--p, 0) * -6vh);
-      }
+      display: none;
     }
   }
 
@@ -86,37 +100,40 @@
     overflow: visible;
     pointer-events: none;
 
+    // the stream: a deeper edge, the body, and a bright core where the light goes through it
+    // the stream: a soft edge, the body, and a light core, all in the colours of the drink (the whole stream is blurred a little)
     &__stream {
-      stroke: var(--pop);
+      stroke: color-mix(in srgb, var(--pop) 78%, var(--pop-light));
+
+      &--edge {
+        stroke: color-mix(in srgb, var(--pop) 88%, var(--pop-light));
+        stroke-opacity: 0.55;
+      }
+
+      &--core {
+        stroke: var(--pop-light);
+        stroke-opacity: 0.55;
+      }
+    }
+
+    // the thin bright line where the drink meets the air
+    &__edge {
+      stroke: #fff;
+      stroke-opacity: 0.5;
+      stroke-width: 2.4;
     }
   }
 
-  // the way to the shop, under the glass; it fades as the glass starts to tip
-  &__cta {
-    position: absolute;
-    z-index: 4;
-    bottom: clamp(1.5rem, 7vh, 4rem);
-    left: 50%;
-    translate: -50% 0;
-
-    .btn--primary {
-      padding: 1.15em 2.4em;
-      background: var(--vanilla);
-      box-shadow: 0.3rem 0.35rem 0 var(--burnt-deep);
-      color: var(--burnt);
-      font-size: clamp(0.95rem, #{m.vw(1.4)}, 1.15rem);
-    }
-  }
-
-  // the waves of colour: each rises from below, with a wavy edge, and the last one is the
-  // colour of the next section
+  // the wave of colour: it rises from below with a wavy edge and is the stripes of the next section (Elegí), so the cover
+  // runs straight into it. Its stripes line up with the ones under it.
   &__flood {
     position: absolute;
     z-index: 6;
     inset: 0;
-    transform: translateY(calc(100% + 62px));
+    transform: translateY(calc(100% + 4.3rem));
     pointer-events: none;
     will-change: transform;
+    @include m.stripes(var(--burnt), var(--burnt-deep));
 
     svg {
       position: absolute;
@@ -124,26 +141,10 @@
       left: 0;
       width: 200%;
       height: 60px;
-      animation: drift 6s linear infinite;
     }
 
     path {
-      fill: currentColor;
-    }
-
-    &--peach {
-      background: var(--petal-peach);
-      color: var(--petal-peach);
-    }
-
-    &--paper {
-      background: var(--paper);
-      color: var(--paper);
-
-      svg {
-        animation-duration: 8s;
-        animation-direction: reverse;
-      }
+      fill: url("#hero-stripes");
     }
   }
 

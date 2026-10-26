@@ -50,7 +50,15 @@
     }
   }
 
-  // on phones the word sits above the glass, so it can be read
+  // huge wide capitals behind the glass
+  &__word {
+    font: 800 clamp(5rem, #{m.vw(24)}, 24rem) / 0.8 var(--font-wide);
+    letter-spacing: -0.07em;
+    text-transform: uppercase;
+  }
+
+  // on phones the word sits above the glass, so it can be read; it must come after the rule above to win.
+  // "Mezclá" is 5.13 em wide, so 17vw leaves it a margin on a 375 px screen
   @include m.tablet {
     &__panel {
       place-items: start center;
@@ -60,13 +68,6 @@
     &__word {
       font-size: clamp(3.4rem, 17vw, 7rem);
     }
-  }
-
-  // huge wide capitals behind the glass
-  &__word {
-    font: 800 clamp(5rem, #{m.vw(24)}, 24rem) / 0.8 var(--font-wide);
-    letter-spacing: -0.07em;
-    text-transform: uppercase;
   }
 
   // the slices and leaves go over the glass here

@@ -8,8 +8,6 @@ export const CONTACT = {
     { icon: "mail", label: "Mail", value: "hola@drinks.example", href: "mailto:hola@drinks.example" },
     { icon: "bag", label: "Dirección", value: "Entregas en Corrientes Capital" },
   ] satisfies { icon: IconName; label: string; value: string; href?: `https://${string}` | `mailto:${string}` }[],
-  /** The handwritten note on the label, one word per line. */
-  note: ["Sin", "compromiso"],
   /** Two facts at the foot of the label, separated by a hairline. */
   facts: [
     { label: "Atención", value: "12 a 21 h" },

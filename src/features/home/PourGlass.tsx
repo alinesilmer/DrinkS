@@ -1,6 +1,7 @@
 import { type MutableRefObject, type RefObject, useEffect, useRef } from "react";
 import { GLASS_PHOTO } from "@/data/media";
 import { prefersReducedMotion } from "@/hooks/useReducedMotion";
+import { runWhileVisible } from "@/lib/frameLoop";
 import { clamp, ease, span } from "@/lib/math";
 
 // The big glass of the cover. It tips as `progress` (0 → 1, the pinned scroll) grows and the
@@ -65,7 +66,10 @@ export function PourGlass({ progress, host }: PourGlassProps) {
     // the parts that tip with the glass
     const tipping = [...svg.querySelectorAll("[data-tip]")];
 
-    const s = { hover: 0, target: 0, slope: 0, v: 0, energy: 0, a: 0 };
+    const streamGroup = streamEls[0]?.parentElement;
+    if (!streamGroup) return undefined;
+
+    const s = { hover: 0, target: 0, slope: 0, v: 0, energy: 0, a: 0, soft: false };
 
     const onMove = (e: PointerEvent) => {
       const r = hostEl.getBoundingClientRect();
@@ -112,6 +116,15 @@ export function PourGlass({ progress, host }: PourGlassProps) {
 
       const grow = span(p, POUR_STARTS, POUR_STARTS + 0.16);
       const width = STREAM.width * Math.min(1, grow * 4) * (1 - span(p, DRY[0], DRY[1]));
+      // no stream (before the pour, after it dried up): nothing to redraw, and no blur to pay for. The frame it
+      // disappears on, the strokes are drawn once more at width 0.
+      const streaming = width > 0.05;
+      if (!streaming && !s.soft) return;
+      if (streaming !== s.soft) {
+        s.soft = streaming;
+        if (streaming) streamGroup.setAttribute("filter", "url(#pour-soft)");
+        else streamGroup.removeAttribute("filter");
+      }
       // the stream leaves the lip in an arc, then falls and sways a little as it goes
       const fall = STREAM.length * grow;
       const SEGMENTS = 14;
@@ -129,16 +142,11 @@ export function PourGlass({ progress, host }: PourGlassProps) {
       });
     };
 
-    let frame = 0;
-    const loop = (now: number) => {
-      if (hostEl.getBoundingClientRect().bottom > 0) draw(now);
-      frame = requestAnimationFrame(loop);
-    };
-    if (prefersReducedMotion()) draw(0);
-    else frame = requestAnimationFrame(loop);
+    const stopLoop = prefersReducedMotion() ? undefined : runWhileVisible(hostEl, draw);
+    if (!stopLoop) draw(0);
 
     return () => {
-      cancelAnimationFrame(frame);
+      stopLoop?.();
       hostEl.removeEventListener("pointermove", onMove);
       hostEl.removeEventListener("pointerleave", onLeave);
     };
@@ -168,8 +176,8 @@ export function PourGlass({ progress, host }: PourGlassProps) {
           <stop offset="0.86" style={{ stopColor: "var(--ink)" }} stopOpacity="0" />
           <stop offset="1" style={{ stopColor: "var(--ink)" }} stopOpacity="0.18" />
         </linearGradient>
-        {/* the stream is softened a little, so it melts into the colours around it */}
-        <filter id="pour-soft" filterUnits="userSpaceOnUse" x="-500" y="-500" width="1000" height="2600">
+        {/* the stream is softened a little, so it melts into the colours around it (the region is just where it can be) */}
+        <filter id="pour-soft" filterUnits="userSpaceOnUse" x="-100" y="-200" width="400" height="1700">
           <feGaussianBlur stdDeviation="1.8" />
         </filter>
         <clipPath id="pour-bowl">
@@ -183,7 +191,7 @@ export function PourGlass({ progress, host }: PourGlassProps) {
           <path data-liquid fill="url(#pour-side)" />
           <path data-edge className="pour__edge" fill="none" strokeLinecap="round" />
         </g>
-        <g fill="none" strokeLinecap="round" strokeLinejoin="round" filter="url(#pour-soft)">
+        <g fill="none" strokeLinecap="round" strokeLinejoin="round">
           <path data-stream data-k="1.14" data-dx="0" className="pour__stream pour__stream--edge" />
           <path data-stream data-k="1" data-dx="0" className="pour__stream" />
           <path data-stream data-k="0.3" data-dx="-0.2" className="pour__stream pour__stream--core" />

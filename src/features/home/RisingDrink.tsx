@@ -1,5 +1,6 @@
 import { type RefObject, useEffect, useId, useRef } from "react";
 import { prefersReducedMotion } from "@/hooks/useReducedMotion";
+import { runWhileVisible } from "@/lib/frameLoop";
 import { clamp } from "@/lib/math";
 
 // The drink of the tall glass, in the pixels of its photo (1086 wide). It is ONE liquid that rises: its level follows
@@ -42,15 +43,11 @@ export function RisingDrink({ driver }: RisingDriveProps) {
       bodyEl.setAttribute("d", `${edgePath}L${WIDTH + SAMPLE} ${EMPTY + 40}L0 ${EMPTY + 40}Z`);
     };
 
-    let frame = 0;
-    const loop = (now: number) => {
-      const r = host.getBoundingClientRect();
-      if (r.bottom > 0 && r.top < innerHeight) draw(now);
-      frame = requestAnimationFrame(loop);
-    };
-    if (prefersReducedMotion()) draw(0);
-    else frame = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(frame);
+    if (prefersReducedMotion()) {
+      draw(0);
+      return undefined;
+    }
+    return runWhileVisible(host, draw);
   }, [driver]);
 
   return (

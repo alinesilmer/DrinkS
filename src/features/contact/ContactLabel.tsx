@@ -8,8 +8,8 @@ import { CONTACT } from "@/data/contactContent";
 const DRINK = "M0 540Q145 505 290 540T580 540T870 540T1160 540V1100H0Z";
 
 /**
- * Contacto, as a printed label: the title and the logo, a hairline, the ways to reach us in serif, a small glass with
- * its note written by hand, and two facts and the button at the foot. The button opens the letter (the form).
+ * Contacto, as a printed label: the title and the logo, a hairline, the ways to reach us beside a small glass, and
+ * two facts and the button at the foot. The button opens the letter (the form).
  */
 export function ContactLabel({ onWrite }: { onWrite: () => void }) {
   return (
@@ -37,13 +37,6 @@ export function ContactLabel({ onWrite }: { onWrite: () => void }) {
         <PhotoGlass shape={ROCKS} className="contact-label__glass">
           <path className="contact-label__drink" d={DRINK} />
         </PhotoGlass>
-        <p className="contact-label__note" aria-label={CONTACT.note.join(" ")}>
-          {CONTACT.note.map((word) => (
-            <span key={word} aria-hidden="true">
-              {word}
-            </span>
-          ))}
-        </p>
       </div>
       <footer className="contact-label__foot">
         <dl className="contact-label__facts">

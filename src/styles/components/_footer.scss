@@ -92,7 +92,13 @@
     justify-items: start;
     gap: 0.75rem;
 
+    // the logo is wider than a half column: the brand takes the whole row
+    @include m.tablet {
+      grid-column: 1 / -1;
+    }
+
     .logo {
+      max-width: 100%;
       height: 5rem;
     }
 

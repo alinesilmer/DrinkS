@@ -49,11 +49,23 @@
     .logo {
       height: clamp(3.4rem, #{m.vw(5.4)}, 5.2rem);
     }
+
+    // the title and the logo do not fit side by side: the logo goes above, small
+    @include m.phone {
+      flex-wrap: wrap-reverse;
+      gap: 0.8rem;
+
+      .logo {
+        height: 2.6rem;
+      }
+    }
   }
 
   &__title {
-    font: 700 clamp(3.4rem, #{m.vw(7.8)}, 7.4rem) / 0.95 var(--font-premium);
-    letter-spacing: 0.01em;
+    // the wide capitals of "Todo para tu bar" (components/_page-hero.scss)
+    font: 800 clamp(2.2rem, #{m.vw(6.2)}, 6.2rem) / 1 var(--font-wide);
+    letter-spacing: -0.045em;
+    text-transform: uppercase;
   }
 
   &__rule {
@@ -63,10 +75,10 @@
     background: #0b244770;
   }
 
-  // the channels on the left, a small glass in the middle, a note on the right
+  // the channels on the left, a small glass on the right
   &__cols {
     display: grid;
-    grid-template-columns: 1.25fr 0.7fr 0.6fr;
+    grid-template-columns: 1.25fr 0.7fr;
     align-items: center;
     gap: 2rem;
 
@@ -90,7 +102,7 @@
   &__name {
     display: block;
     margin-bottom: 0.5rem;
-    font: 800 0.9rem / 1 var(--font-body);
+    font: 700 1.15rem / 1 var(--font-premium);
     letter-spacing: 0.24em;
     text-transform: uppercase;
     opacity: 0.6;
@@ -99,9 +111,14 @@
   &__value {
     display: block;
     color: inherit;
-    font: 700 clamp(2rem, #{m.vw(3.2)}, 3.1rem) / 1 var(--font-premium);
+    font: 700 clamp(1.4rem, #{m.vw(2.3)}, 2.3rem) / 1.1 var(--font-body);
     overflow-wrap: anywhere;
     text-decoration: none;
+
+    // "hola@drinks.example" on one line, not broken in the middle of a word
+    @include m.phone {
+      font-size: 1.3rem;
+    }
   }
 
   a.contact-label__value {
@@ -126,18 +143,6 @@
 
   &__drink {
     fill: #f26b8a;
-  }
-
-  // the handwritten note, a little turned
-  &__note {
-    display: grid;
-    justify-items: center;
-    font: 400 clamp(2.6rem, #{m.vw(4.2)}, 4rem) / 1 var(--font-cal);
-    rotate: -7deg;
-
-    @include m.tablet {
-      display: none;
-    }
   }
 
   // two facts and the button, between hairlines

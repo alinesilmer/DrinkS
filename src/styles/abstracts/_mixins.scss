@@ -27,8 +27,10 @@ $design-scale: 0.9;
   }
 }
 
+// Phones: up to 460 real px (an iPhone 13 mini is 375, a Pro Max 430). Not scaled by bp(): below the tablet
+// width --ui-scale is back at the design scale, so the width is already the one it was drawn for.
 @mixin phone {
-  @media (max-width: #{bp(460px)}) {
+  @media (max-width: 460px) {
     @content;
   }
 }

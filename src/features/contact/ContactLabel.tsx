@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/Button";
+import { Icon } from "@/components/ui/Icon";
 import { Logo } from "@/components/ui/Logo";
 import { ROCKS } from "@/features/home/glassShapes";
 import { PhotoGlass } from "@/features/home/PhotoGlass";
@@ -8,7 +9,7 @@ import { CONTACT } from "@/data/contactContent";
 const DRINK = "M0 540Q145 505 290 540T580 540T870 540T1160 540V1100H0Z";
 
 /**
- * Contacto, as a printed label: the title and the logo, a hairline, the ways to reach us beside a small glass, and
+ * Contacto, as a printed label: the title and the logo, a hairline, the ways to reach us (an icon and the detail) beside a small glass, and
  * two facts and the button at the foot. The button opens the letter (the form).
  */
 export function ContactLabel({ onWrite }: { onWrite: () => void }) {
@@ -23,7 +24,10 @@ export function ContactLabel({ onWrite }: { onWrite: () => void }) {
         <ul className="contact-label__list">
           {CONTACT.channels.map((c) => (
             <li key={c.label}>
-              <span className="contact-label__name">{c.label}</span>
+              <span className="contact-label__icon">
+                <Icon name={c.icon} />
+              </span>
+              <span className="visually-hidden">{c.label}: </span>
               {"href" in c && c.href ? (
                 <a className="contact-label__value" href={c.href} target="_blank" rel="noopener noreferrer">
                   {c.value}

@@ -16,7 +16,7 @@ interface ProductCardProps {
   index: number;
 }
 
-/** A shop card like a print taped to the wall: name, photo on a mat, a line about it, size, price, and a round "+" that becomes − n + in the cart. */
+/** A shop card like a print taped to the wall: name, photo on a mat, size, price, and a round "+" that becomes − n + in the cart. */
 export function ProductCard({ product, index }: ProductCardProps) {
   const card = useRef<HTMLElement>(null);
   const seen = useInView(card, { rootMargin: "0px 0px -8% 0px" });
@@ -29,7 +29,6 @@ export function ProductCard({ product, index }: ProductCardProps) {
       <div className="product-card__media">
         <Photo src={product.image} alt={product.name} />
       </div>
-      <p className="product-card__note">{product.note}</p>
       <div className="product-card__buy">
         <div className="product-card__cost">
           <p className="product-card__size">{product.size}</p>

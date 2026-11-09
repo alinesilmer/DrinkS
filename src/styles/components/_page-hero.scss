@@ -18,24 +18,13 @@
   // small spaced capitals above the title, in the wide face of the cover
   &__kicker {
     color: var(--sun-ink);
-    font: 700 clamp(0.8rem, #{m.vw(1.5)}, 1.5rem) / 1 var(--font-wide);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-
-    // a rule the width of the headline
-    &::after {
-      content: "";
-      display: block;
-      width: min(78%, 60rem);
-      margin: clamp(0.7rem, 2vh, 1.3rem) auto 0;
-      border-top: 3px solid var(--sun-ink);
-    }
+    @include m.kicker(var(--sun-ink));
   }
 
   // the headline of the cover: wide capitals, tight, with a cursive line leaning under it
   &__title {
     max-width: 16ch;
-    margin: clamp(0.5rem, 1.5vh, 1rem) auto 0;
+    margin: 0 auto;
     color: var(--sun-ink);
     font: 800 clamp(2.4rem, m.vw(7), 6.4rem) / 1 var(--font-wide);
     letter-spacing: -0.045em;

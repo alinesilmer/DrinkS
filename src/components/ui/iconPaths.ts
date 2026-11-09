@@ -9,7 +9,9 @@ export const ICON_PATHS = {
   menu: "M4 7h16M4 12h16M4 17h16",
   plus: "M12 5v14M5 12h14",
   minus: "M5 12h14",
-  ice: "M5 9l7-4 7 4v7l-7 4-7-4Z M5 9l7 4 7-4 M12 13v7",
+  pin: "M12 21s-6-5.6-6-11a6 6 0 0 1 12 0c0 5.4-6 11-6 11Z M12 7.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z",
+  thermo:"M10 14.5V5a2 2 0 0 1 4 0v9.5a4 4 0 1 1-4 0Z M12 10v8",
+  ice:"M5 9l7-4 7 4v7l-7 4-7-4Z M5 9l7 4 7-4 M12 13v7",
 } as const;
 
 export type IconName = keyof typeof ICON_PATHS;

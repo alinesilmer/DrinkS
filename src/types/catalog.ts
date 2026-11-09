@@ -10,8 +10,6 @@ export interface Product {
   price: number;
   /** Photo path under /public. */
   image: string;
-  /** A few words that sell it: "Suave, para mojitos". */
-  note: string;
 }
 
 export interface Category {

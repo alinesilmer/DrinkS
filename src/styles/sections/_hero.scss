@@ -29,23 +29,12 @@
     pointer-events: none;
   }
 
+  // a rule the width of the headline under it
   &__kicker {
-    font: 700 clamp(0.8rem, #{m.vw(1.5)}, 1.5rem) / 1 var(--font-wide);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-
-    // a rule the width of the headline
-    &::after {
-      content: "";
-      display: block;
-      width: min(78%, 80rem);
-      margin: clamp(0.7rem, 2vh, 1.3rem) auto 0;
-      border-top: 3px solid var(--lime);
-    }
+    @include m.kicker(var(--lime), $rule-max: 80rem);
   }
 
   &__headline {
-    margin-top: clamp(0.4rem, 1.5vh, 1rem);
     font-weight: 400;
   }
 

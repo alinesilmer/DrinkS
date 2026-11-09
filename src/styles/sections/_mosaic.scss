@@ -76,7 +76,7 @@
     }
   }
 
-  // the name, dots, and the number
+  // the icon, the name, dots, and the number
   &__row {
     display: flex;
     align-items: baseline;
@@ -88,6 +88,17 @@
       flex: 1;
       border-bottom: 3px dotted #0b244766;
       translate: 0 -0.3rem;
+    }
+  }
+
+  // sits on the baseline of the name; the icon is drawn a little larger than the default
+  &__icon {
+    align-self: center;
+    color: var(--cobalt);
+
+    .icon {
+      width: clamp(1.5rem, #{m.vw(2.2)}, 2.2rem);
+      height: clamp(1.5rem, #{m.vw(2.2)}, 2.2rem);
     }
   }
 
@@ -107,11 +118,5 @@
       font-size: 0.42em;
       letter-spacing: -0.02em;
     }
-  }
-
-  &__text {
-    margin-top: 0.4rem;
-    font: 600 italic clamp(1.15rem, #{m.vw(1.8)}, 1.55rem) / 1.2 var(--font-premium);
-    opacity: 0.85;
   }
 }

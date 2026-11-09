@@ -131,6 +131,23 @@ $design-scale: 0.9;
   text-transform: none;
 }
 
+// ---------- kicker ----------
+// The small line above a headline, in spaced wide capitals, with a rule under it. The space between the rule and
+// the title is --rule-gap (base/_tokens.scss), so every header breathes the same; the title needs no top margin.
+@mixin kicker($rule-color, $rule-width: 78%, $rule-max: 60rem) {
+  font: 700 clamp(0.8rem, #{vw(1.5)}, 1.5rem) / 1 var(--font-wide);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+
+  &::after {
+    content: "";
+    display: block;
+    width: min(#{$rule-width}, #{$rule-max});
+    margin: clamp(0.7rem, 2vh, 1.3rem) auto var(--rule-gap);
+    border-top: 3px solid $rule-color;
+  }
+}
+
 // ---------- the wall of Productos ----------
 // A light grey plaster: a very fine, even grain over the flat --wall colour (no marks, nothing drawn). A function, so
 // the page and the wave of the footer above it (components/_footer.scss) are exactly the same wall.

@@ -92,24 +92,40 @@
     }
   }
 
+  // one channel per row: its icon, then the detail
   &__list {
     display: grid;
-    gap: clamp(1.2rem, #{m.vw(1.8)}, 1.9rem);
+    gap: clamp(1.4rem, #{m.vw(2.2)}, 2.2rem);
     padding: 0;
     list-style: none;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: clamp(0.8rem, #{m.vw(1.4)}, 1.4rem);
+    }
   }
 
-  &__name {
-    display: block;
-    margin-bottom: 0.5rem;
-    font: 700 1.15rem / 1 var(--font-premium);
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-    opacity: 0.6;
+  // the icon in a round pink badge
+  &__icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: clamp(2.8rem, #{m.vw(4)}, 3.8rem);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--rose);
+    color: var(--cream);
+
+    .icon {
+      width: 50%;
+      height: 50%;
+    }
   }
 
   &__value {
     display: block;
+    min-width: 0;
     color: inherit;
     font: 700 clamp(1.4rem, #{m.vw(2.3)}, 2.3rem) / 1.1 var(--font-body);
     overflow-wrap: anywhere;

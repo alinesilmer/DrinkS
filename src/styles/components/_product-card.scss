@@ -100,24 +100,12 @@
     }
   }
 
-  // one line about it
-  &__note {
-    min-height: 2.3em;
-    margin-top: 0.7rem;
-    font: 500 0.95rem / 1.15 var(--font-premium);
-    letter-spacing: 0.06em;
-    text-align: center;
-    text-transform: uppercase;
-    text-wrap: balance;
-    opacity: 0.8;
-  }
-
   &__size {
     margin-bottom: 0.4rem;
-    font: 800 0.58rem / 1 var(--font-body);
-    letter-spacing: 0.2em;
+    font: 800 0.8rem / 1 var(--font-body);
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    opacity: 0.6;
+    opacity: 0.7;
   }
 
   &__buy {

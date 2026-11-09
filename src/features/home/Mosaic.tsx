@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { Icon } from "@/components/ui/Icon";
 import { Section } from "@/components/ui/Section";
 import { HURRICANE } from "@/features/home/glassShapes";
 import { PhotoGlass } from "@/features/home/PhotoGlass";
@@ -10,7 +11,7 @@ import { MOSAIC } from "@/data/homeContent";
 /**
  * "Por qué DrinkS", laid out like a bar menu: the whole section is on awning stripes; on the left the glass, which
  * fills with one smooth gradient of colour as you scroll (its surface sways by itself); on the right a solid cream
- * card with the three promises, one line each with dots up to the number, and each line appears when the drink
+ * card with the three promises, one line each (an icon, a few words, dots up to the number), and each line appears when the drink
  * reaches its height (the top line when the glass is full).
  */
 export function Mosaic() {
@@ -31,13 +32,15 @@ export function Mosaic() {
           {MOSAIC.promises.map((p, i) => (
             <li key={p.title} className="mosaic__item" style={cssVars({ "--k": 2 - i })}>
               <p className="mosaic__row">
+                <span className="mosaic__icon">
+                  <Icon name={p.icon} />
+                </span>
                 <span className="mosaic__name">{p.title}</span>
                 <b className="mosaic__big">
                   {p.big}
                   <small>{p.unit}</small>
                 </b>
               </p>
-              <p className="mosaic__text">{p.text}</p>
             </li>
           ))}
         </ul>

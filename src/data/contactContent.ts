@@ -1,12 +1,12 @@
 import { type IconName } from "@/components/ui/iconPaths";
 
-// Contact page copy. The channel values are placeholders.
+// Contact page copy. The channel values are placeholders. A channel shows its icon; the label is for screen readers.
 export const CONTACT = {
   title: "Contacto",
   channels: [
     { icon: "chat", label: "WhatsApp", value: "+54 379 000-0000", href: "https://wa.me/543790000000" },
     { icon: "mail", label: "Mail", value: "hola@drinks.example", href: "mailto:hola@drinks.example" },
-    { icon: "bag", label: "Dirección", value: "Entregas en Corrientes Capital" },
+    { icon: "pin", label: "Dirección", value: "Entregas en Corrientes Capital" },
   ] satisfies { icon: IconName; label: string; value: string; href?: `https://${string}` | `mailto:${string}` }[],
   /** Two facts at the foot of the label, separated by a hairline. */
   facts: [
